@@ -2,7 +2,7 @@
 # Drag and Drop file in Windows Forms and press button
 #
 # Autor: Ulises Cune (@Ulises2k)
-# v1.0
+# v1.1
 
 
 #######################CONSOLE################################################################
@@ -125,11 +125,13 @@ function ConvertPriceMT5toMT4 ([string]$value, [string]$file) {
 #Profile settings use true/false. Tester setting use 1/0. I convert to profile for default
 function ConvertBoolMT5toMT4 ([string]$value, [string]$file) {
     $inifile = Get-IniFile($file)
+
     if ([string]$inifile[$value] -eq "0") {
         Set-OrAddIniValue -FilePath $file  -keyValueList @{
             $value = "false"
         }
     }
+
     if ([string]$inifile[$value] -eq "1") {
         Set-OrAddIniValue -FilePath $file  -keyValueList @{
             $value = "true"
@@ -149,7 +151,6 @@ function ReplaceDefaultsValueMT5toMT4 ([string]$file) {
         Show_Opened      = "1"
         Show_Closed      = "1"
         Show_Pending     = "1"
-        MaxHistoryDeals  = "1"
         GUI_ShowSignals  = "1"
     }
 }
@@ -175,6 +176,8 @@ function MainConvert2MT4 ([string]$filePath) {
     ConvertTFMT5toMT4 -value "FIBO_TF" -file $Destino
     ConvertTFMT5toMT4 -value "FIB2_TF" -file $Destino
     ConvertTFMT5toMT4 -value "MACD_TF" -file $Destino
+    ConvertTFMT5toMT4 -value "MACD2_TF" -file $Destino
+    ConvertTFMT5toMT4 -value "DTrend_TF" -file $Destino
     ConvertTFMT5toMT4 -value "PSar_TF" -file $Destino
     ConvertTFMT5toMT4 -value "MA_Filter_1_TF" -file $Destino
     ConvertTFMT5toMT4 -value "MA_Filter_2_TF" -file $Destino
@@ -190,6 +193,7 @@ function MainConvert2MT4 ([string]$filePath) {
     ConvertPriceMT5toMT4 -value "IdentifyTrend_AppliedPrice" -file $Destino
     ConvertPriceMT5toMT4 -value "TDI_AppliedPriceRSI" -file $Destino
     ConvertPriceMT5toMT4 -value "MACD_Price" -file $Destino
+    ConvertPriceMT5toMT4 -value "MACD2_Price" -file $Destino
     ConvertPriceMT5toMT4 -value "MA_Filter_1_Price" -file $Destino
     ConvertPriceMT5toMT4 -value "MA_Filter_2_Price" -file $Destino
     ConvertPriceMT5toMT4 -value "MA_Filter_3_Price" -file $Destino
@@ -225,6 +229,12 @@ function MainConvert2MT4 ([string]$filePath) {
     #; MACD properties
     ConvertBoolMT5toMT4 -value "MACD_Reverse" -file $Destino
     ConvertBoolMT5toMT4 -value "MACD_UseClosedBars" -file $Destino
+    #; MACD2 properties
+    ConvertBoolMT5toMT4 -value "MACD2_Reverse" -file $Destino
+    ConvertBoolMT5toMT4 -value "MACD2_UseClosedBars" -file $Destino
+    #; DTrend properties
+    ConvertBoolMT5toMT4 -value "DTrend_Reverse" -file $Destino
+    ConvertBoolMT5toMT4 -value "DTrend_UseClosedBars" -file $Destino
     #; Parabolic SAR properties
     ConvertBoolMT5toMT4 -value "PSar_Reverse" -file $Destino
     #; ZZ properties
