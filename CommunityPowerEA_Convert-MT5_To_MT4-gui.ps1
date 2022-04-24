@@ -2,7 +2,7 @@
 # Drag and Drop file in Windows Forms and press button
 #
 # Autor: Ulises Cune (@Ulises2k)
-# v1.2
+# v1.3
 
 
 #######################CONSOLE################################################################
@@ -174,10 +174,10 @@ function MainConvert2MT4 ([string]$filePath) {
     ConvertTFMT5toMT4 -value "Oscillator3_TF" -file $Destino
     ConvertTFMT5toMT4 -value "IdentifyTrend_TF" -file $Destino
     ConvertTFMT5toMT4 -value "TDI_TF" -file $Destino
-    ConvertTFMT5toMT4 -value "FIBO_TF" -file $Destino
-    ConvertTFMT5toMT4 -value "FIB2_TF" -file $Destino
     ConvertTFMT5toMT4 -value "MACD_TF" -file $Destino
     ConvertTFMT5toMT4 -value "MACD2_TF" -file $Destino
+    ConvertTFMT5toMT4 -value "MACD3_TF" -file $Destino
+    ConvertTFMT5toMT4 -value "ADX_TF" -file $Destino
     ConvertTFMT5toMT4 -value "DTrend_TF" -file $Destino
     ConvertTFMT5toMT4 -value "PSar_TF" -file $Destino
     ConvertTFMT5toMT4 -value "MA_Filter_1_TF" -file $Destino
@@ -186,6 +186,8 @@ function MainConvert2MT4 ([string]$filePath) {
     ConvertTFMT5toMT4 -value "ZZ_TF" -file $Destino
     ConvertTFMT5toMT4 -value "VolMA_TF" -file $Destino
     ConvertTFMT5toMT4 -value "VolFilter_TF" -file $Destino
+    ConvertTFMT5toMT4 -value "FIBO_TF" -file $Destino
+    ConvertTFMT5toMT4 -value "FIB2_TF" -file $Destino
 
     #Convert Price
     ConvertPriceMT5toMT4 -value "Oscillators_Price" -file $Destino
@@ -195,6 +197,8 @@ function MainConvert2MT4 ([string]$filePath) {
     ConvertPriceMT5toMT4 -value "TDI_AppliedPriceRSI" -file $Destino
     ConvertPriceMT5toMT4 -value "MACD_Price" -file $Destino
     ConvertPriceMT5toMT4 -value "MACD2_Price" -file $Destino
+    ConvertPriceMT5toMT4 -value "MACD3_Price" -file $Destino
+    ConvertPriceMT4toMT5 -value "ADX_Price" -file $Destino
     ConvertPriceMT5toMT4 -value "MA_Filter_1_Price" -file $Destino
     ConvertPriceMT5toMT4 -value "MA_Filter_2_Price" -file $Destino
     ConvertPriceMT5toMT4 -value "MA_Filter_3_Price" -file $Destino
@@ -204,9 +208,12 @@ function MainConvert2MT4 ([string]$filePath) {
     ConvertBoolMT5toMT4 -value "ManageManual" -file $Destino
 	#; Hedge properties
 	ConvertBoolMT5toMT4 -value "AllowHedge" -file $Destino
+    #; Global Account properties
+    ConvertBoolMT5toMT4 -value "GlobalAccountStopTillTomorrow" -file $Destino
 	#; Pending entry properties
     ConvertBoolMT5toMT4 -value "Pending_CancelOnOpposite" -file $Destino
 	ConvertBoolMT5toMT4 -value "Pending_DisableForOpposite" -file $Destino
+    ConvertBoolMT5toMT4 -value "Pending_DeleteIfOpposite" -file $Destino
     #; StopLoss properties
     ConvertBoolMT5toMT4 -value "UseVirtualSL" -file $Destino
     #; TakeProfit properties
@@ -221,6 +228,7 @@ function MainConvert2MT4 ([string]$filePath) {
 	ConvertBoolMT5toMT4 -value "AllowBothMartinAndAntiMartin" -file $Destino
 
 	#; Partial close properties
+    ConvertBoolMT5toMT4 -value "PartialClose_AnyToAny" -file $Destino
 	ConvertBoolMT5toMT4 -value "PartialCloseHedge_MainToMain" -file $Destino
 	ConvertBoolMT5toMT4 -value "PartialCloseHedge_BothWays" -file $Destino
 
@@ -252,13 +260,23 @@ function MainConvert2MT4 ([string]$filePath) {
     #; MACD2 properties
     ConvertBoolMT5toMT4 -value "MACD2_Reverse" -file $Destino
     ConvertBoolMT5toMT4 -value "MACD2_UseClosedBars" -file $Destino
+    #; MACD3 properties
+    ConvertBoolMT5toMT4 -value "MACD3_Reverse" -file $Destino
+    ConvertBoolMT5toMT4 -value "MACD3_UseClosedBars" -file $Destino
+    #; ADX properties
+    ConvertBoolMT5toMT4 -value "ADX_Reverse" -file $Destino
+    ConvertBoolMT5toMT4 -value "ADX_UseClosedBars" -file $Destino
     #; DTrend properties
     ConvertBoolMT5toMT4 -value "DTrend_Reverse" -file $Destino
     ConvertBoolMT5toMT4 -value "DTrend_UseClosedBars" -file $Destino
     #; Parabolic SAR properties
     ConvertBoolMT5toMT4 -value "PSar_Reverse" -file $Destino
     #; ZigZag properties
+    ConvertBoolMT5toMT4 -value "ZZ_UsePrevExtremums" -file $Destino
+    ConvertBoolMT5toMT4 -value "ZZ_Reverse" -file $Destino
     ConvertBoolMT5toMT4 -value "ZZ_UseClosedBars" -file $Destino
+    ConvertBoolMT5toMT4 -value "ZZ_VisualizeLevels" -file $Destino
+    ConvertBoolMT5toMT4 -value "ZZ_FillRectangle" -file $Destino
     #; FIBO #1 properties
     ConvertBoolMT5toMT4 -value "FIBO_UseClosedBars" -file $Destino
     #; FIBO #2 properties
@@ -295,7 +313,6 @@ function MainConvert2MT4 ([string]$filePath) {
 ### API Windows Forms ###
 [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms")
 [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing")
-
 
 
 ### Create form ###
