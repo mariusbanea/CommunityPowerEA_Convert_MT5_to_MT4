@@ -198,7 +198,7 @@ function MainConvert2MT4 ([string]$filePath) {
     ConvertPriceMT5toMT4 -value "MACD_Price" -file $Destino
     ConvertPriceMT5toMT4 -value "MACD2_Price" -file $Destino
     ConvertPriceMT5toMT4 -value "MACD3_Price" -file $Destino
-    ConvertPriceMT4toMT5 -value "ADX_Price" -file $Destino
+    ConvertPriceMT5toMT4 -value "ADX_Price" -file $Destino
     ConvertPriceMT5toMT4 -value "MA_Filter_1_Price" -file $Destino
     ConvertPriceMT5toMT4 -value "MA_Filter_2_Price" -file $Destino
     ConvertPriceMT5toMT4 -value "MA_Filter_3_Price" -file $Destino
