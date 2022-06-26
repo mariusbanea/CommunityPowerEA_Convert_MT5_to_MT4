@@ -315,7 +315,6 @@ function MainConvert2MT4 ([string]$filePath) {
 [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms")
 [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing")
 
-
 ### Create form ###
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "Convert from MT5 to MT4 - CommunityPower EA"
@@ -325,25 +324,28 @@ $form.MinimumSize = $form.Size
 $form.MaximizeBox = $False
 $form.Topmost = $True
 
-
 ### Define controls ###
+# Button
 $button = New-Object System.Windows.Forms.Button
 $button.Location = '5,5'
 $button.Size = '75,23'
 $button.Width = 120
 $button.Text = "Convert to MT4"
 
-$checkbox = New-Object Windows.Forms.Checkbox
+# Checkbox
+$checkbox = New-Object System.Windows.Forms.Checkbox
 $checkbox.Location = '140,8'
 $checkbox.AutoSize = $True
 $checkbox.Text = "Clear afterwards"
 
-$label = New-Object Windows.Forms.Label
+# Label
+$label = New-Object System.Windows.Forms.Label
 $label.Location = '5,40'
 $label.AutoSize = $True
 $label.Text = "Drag and Drop files settings MT5 here:"
 
-$listBox = New-Object Windows.Forms.ListBox
+# Listbox
+$listBox = New-Object System.Windows.Forms.ListBox
 $listBox.Location = '5,60'
 $listBox.Height = 200
 $listBox.Width = 480
@@ -368,6 +370,7 @@ $form.ResumeLayout()
 ### Write event handlers ###
 $button_Click = {
     foreach ($item in $listBox.Items) {
+        $i = Get-Item -LiteralPath $item
         if (!($i -is [System.IO.DirectoryInfo])) {
             MainConvert2MT4 -file $item
             [System.Windows.Forms.MessageBox]::Show('Successfully convert MT5 to MT4 Community Power EA', 'Convert from MT5 to MT4', 0, 64)
@@ -399,25 +402,10 @@ $listBox_DragDrop = [System.Windows.Forms.DragEventHandler] {
     $statusBar.Text = ("List contains $($listBox.Items.Count) items")
 }
 
-$form_FormClosed = {
-    try {
-        $listBox.remove_Click($button_Click)
-        $listBox.remove_DragOver($listBox_DragOver)
-        $listBox.remove_DragDrop($listBox_DragDrop)
-        $listBox.remove_DragDrop($listBox_DragDrop)
-        $form.remove_FormClosed($Form_Cleanup_FormClosed)
-    }
-    catch [Exception]
-    { }
-}
-
-
 ### Wire up events ###
 $button.Add_Click($button_Click)
 $listBox.Add_DragOver($listBox_DragOver)
 $listBox.Add_DragDrop($listBox_DragDrop)
-$form.Add_FormClosed($form_FormClosed)
-
 
 #### Show form ###
 [void] $form.ShowDialog()
