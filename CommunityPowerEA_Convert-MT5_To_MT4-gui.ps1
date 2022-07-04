@@ -65,7 +65,6 @@ function Set-OrAddIniValue {
     $content | Set-Content $FilePath
 }
 
-
 function ConvertTFMT5toMT4 ([string]$value , [string]$file) {
     $inifile = Get-IniFile($file)
     $rvalue = [int]$inifile[$value]
@@ -136,22 +135,6 @@ function ConvertBoolMT5toMT4 ([string]$value, [string]$file) {
         Set-OrAddIniValue -FilePath $file  -keyValueList @{
             $value = "true"
         }
-    }
-}
-
-#Optional
-function ReplaceDefaultsValueMT5toMT4 ([string]$file) {
-    #My Defaults
-    Set-OrAddIniValue -FilePath $file  -keyValueList @{
-        MessagesToGrammy = "0"
-        BE_Alert_After   = "0"
-        GUI_Enabled      = "0"
-        Alerts_Enabled   = "0"
-        Sounds_Enabled   = "0"
-        Show_Opened      = "1"
-        Show_Closed      = "1"
-        Show_Pending     = "1"
-        GUI_ShowSignals  = "1"
     }
 }
 
@@ -303,7 +286,6 @@ function MainConvert2MT4 ([string]$filePath) {
     Write-Output "Successfully Converted MT5 To MT4"
 }
 
-
 #######################GUI################################################################
 ### API Windows Forms ###
 [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms")
@@ -347,9 +329,9 @@ $listBox.Anchor = ([System.Windows.Forms.AnchorStyles]::Bottom -bor [System.Wind
 $listBox.IntegralHeight = $False
 $listBox.AllowDrop = $True
 
+# Status Bar
 $statusBar = New-Object System.Windows.Forms.StatusBar
 $statusBar.Text = "Ready"
-
 
 ### Add controls to form ###
 $form.SuspendLayout()
@@ -359,7 +341,6 @@ $form.Controls.Add($label)
 $form.Controls.Add($listBox)
 $form.Controls.Add($statusBar)
 $form.ResumeLayout()
-
 
 ### Write event handlers ###
 $button_Click = {
