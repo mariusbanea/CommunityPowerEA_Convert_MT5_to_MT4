@@ -2,9 +2,9 @@
 # Drag and Drop file in Windows Forms and press button
 #
 # Autor: Ulises Cune (@Ulises2k)
-# v1.3
-
-
+# v1.4
+#
+#
 #######################CONSOLE################################################################
 Function Get-IniFile ($file) {
     $ini = [ordered]@{}
@@ -68,6 +68,24 @@ function Set-OrAddIniValue {
 function ConvertTFMT5toMT4 ([string]$value , [string]$file) {
     $inifile = Get-IniFile($file)
     $rvalue = [int]$inifile[$value]
+    #MT5 TimeFrame are not in MT4
+    #2 Minutes
+    #3 Minutes
+    #4 Minutes
+    #6 Minutes
+    #10 Minutes
+    #12 Minutes
+    #20 Minutes
+    #2 Hours => 16386
+    #3 Hours => 16387
+    #6 Hours => 16390
+    #8 Hours => 16392
+    #12 Hours => 16396
+    $TimeFrameMT5 = @(2, 3, 4, 6, 10, 12, 20, 16386, 16387, 16390, 16392, 16396)
+
+    if ($TimeFrameMT5.Contains($rvalue)) {
+        return [bool]$false
+    }
 
     #1 Hour
     if ($rvalue -eq 16385) {
@@ -90,7 +108,7 @@ function ConvertTFMT5toMT4 ([string]$value , [string]$file) {
         }
     }
 
-    #1 Week - Signal_TimeFrame=32769 -> 10080
+    #1 Week - Signal_TimeFrame= 32769 -> 10080
     if ($rvalue -eq 32769) {
         Set-OrAddIniValue -FilePath $file  -keyValueList @{
             $value = "10080"
@@ -103,6 +121,9 @@ function ConvertTFMT5toMT4 ([string]$value , [string]$file) {
             $value = "43200"
         }
     }
+
+    return [bool]$true
+
 }
 
 function ConvertPriceMT5toMT4 ([string]$value, [string]$file) {
@@ -148,27 +169,69 @@ function MainConvert2MT4 ([string]$filePath) {
     ConvertINItoProfileVersion -FilePath $Destino
 
     #Convert TimeFrame
-    ConvertTFMT5toMT4 -value "Signal_TimeFrame" -file $Destino
-    ConvertTFMT5toMT4 -value "VolPV_TF" -file $Destino
-    ConvertTFMT5toMT4 -value "BigCandle_TF" -file $Destino
-    ConvertTFMT5toMT4 -value "Oscillators_TF" -file $Destino
-    ConvertTFMT5toMT4 -value "Oscillator2_TF" -file $Destino
-    ConvertTFMT5toMT4 -value "Oscillator3_TF" -file $Destino
-    ConvertTFMT5toMT4 -value "IdentifyTrend_TF" -file $Destino
-    ConvertTFMT5toMT4 -value "TDI_TF" -file $Destino
-    ConvertTFMT5toMT4 -value "MACD_TF" -file $Destino
-    ConvertTFMT5toMT4 -value "MACD2_TF" -file $Destino
-    ConvertTFMT5toMT4 -value "ADX_TF" -file $Destino
-    ConvertTFMT5toMT4 -value "DTrend_TF" -file $Destino
-    ConvertTFMT5toMT4 -value "PSar_TF" -file $Destino
-    ConvertTFMT5toMT4 -value "MA_Filter_1_TF" -file $Destino
-    ConvertTFMT5toMT4 -value "MA_Filter_2_TF" -file $Destino
-    ConvertTFMT5toMT4 -value "MA_Filter_3_TF" -file $Destino
-    ConvertTFMT5toMT4 -value "ZZ_TF" -file $Destino
-    ConvertTFMT5toMT4 -value "VolMA_TF" -file $Destino
-    ConvertTFMT5toMT4 -value "VolFilter_TF" -file $Destino
-    ConvertTFMT5toMT4 -value "FIBO_TF" -file $Destino
-    ConvertTFMT5toMT4 -value "FIB2_TF" -file $Destino
+    if (!(ConvertTFMT5toMT4 -value "Signal_TimeFrame" -file $Destino)) {
+        return [bool]$false
+    }
+    if (!(ConvertTFMT5toMT4 -value "VolPV_TF" -file $Destino)) {
+        return [bool]$false
+    }
+    if (!(ConvertTFMT5toMT4 -value "BigCandle_TF" -file $Destino)) {
+        return [bool]$false
+    }
+    if (!(ConvertTFMT5toMT4 -value "Oscillators_TF" -file $Destino)) {
+        return [bool]$false
+    }
+    if (!(ConvertTFMT5toMT4 -value "Oscillator2_TF" -file $Destino)) {
+        return [bool]$false
+    }
+    if (!(ConvertTFMT5toMT4 -value "Oscillator3_TF" -file $Destino)) {
+        return [bool]$false
+    }
+    if (!(ConvertTFMT5toMT4 -value "IdentifyTrend_TF" -file $Destino)) {
+        return [bool]$false
+    }
+    if (!(ConvertTFMT5toMT4 -value "TDI_TF" -file $Destino)) {
+        return [bool]$false
+    }
+    if (!(ConvertTFMT5toMT4 -value "MACD_TF" -file $Destino)) {
+        return [bool]$false
+    }
+    if (!(ConvertTFMT5toMT4 -value "MACD2_TF" -file $Destino)) {
+        return [bool]$false
+    }
+    if (!(ConvertTFMT5toMT4 -value "ADX_TF" -file $Destino)) {
+        return [bool]$false
+    }
+    if (!(ConvertTFMT5toMT4 -value "DTrend_TF" -file $Destino)) {
+        return [bool]$false
+    }
+    if (!(ConvertTFMT5toMT4 -value "PSar_TF" -file $Destino)) {
+        return [bool]$false
+    }
+    if (!(ConvertTFMT5toMT4 -value "MA_Filter_1_TF" -file $Destino)) {
+        return [bool]$false
+    }
+    if (!(ConvertTFMT5toMT4 -value "MA_Filter_2_TF" -file $Destino)) {
+        return [bool]$false
+    }
+    if (!(ConvertTFMT5toMT4 -value "MA_Filter_3_TF" -file $Destino)) {
+        return [bool]$false
+    }
+    if (!(ConvertTFMT5toMT4 -value "ZZ_TF" -file $Destino)) {
+        return [bool]$false
+    }
+    if (!(ConvertTFMT5toMT4 -value "VolMA_TF" -file $Destino)) {
+        return [bool]$false
+    }
+    if (!(ConvertTFMT5toMT4 -value "VolFilter_TF" -file $Destino)) {
+        return [bool]$false
+    }
+    if (!(ConvertTFMT5toMT4 -value "FIBO_TF" -file $Destino)) {
+        return [bool]$false
+    }
+    if (!(ConvertTFMT5toMT4 -value "FIB2_TF" -file $Destino)) {
+        return [bool]$false
+    }
 
     #Convert Price
     ConvertPriceMT5toMT4 -value "Oscillators_Price" -file $Destino
@@ -178,99 +241,70 @@ function MainConvert2MT4 ([string]$filePath) {
     ConvertPriceMT5toMT4 -value "TDI_AppliedPriceRSI" -file $Destino
     ConvertPriceMT5toMT4 -value "MACD_Price" -file $Destino
     ConvertPriceMT5toMT4 -value "MACD2_Price" -file $Destino
-    ConvertPriceMT5toMT4 -value "ADX_Price" -file $Destino
     ConvertPriceMT5toMT4 -value "MA_Filter_1_Price" -file $Destino
     ConvertPriceMT5toMT4 -value "MA_Filter_2_Price" -file $Destino
     ConvertPriceMT5toMT4 -value "MA_Filter_3_Price" -file $Destino
 
-    #Convert Bool(true/false)
-    #; Expert properties
+    #Convert Bool (true/false)
+    ConvertBoolMT5toMT4 -value "ShowVirtualInfoOnChart" -file $Destino
+    ConvertBoolMT5toMT4 -value "SaveVirtualStateOnEveryChange" -file $Destino
+    ConvertBoolMT5toMT4 -value "SendAlertsToGrammy" -file $Destino
     ConvertBoolMT5toMT4 -value "NewDealOnNewBar" -file $Destino
     ConvertBoolMT5toMT4 -value "ManageManual" -file $Destino
-    #; Hedge properties
     ConvertBoolMT5toMT4 -value "AllowHedge" -file $Destino
-    #; Global Account properties
     ConvertBoolMT5toMT4 -value "GlobalAccountStopTillTomorrow" -file $Destino
-    #; Common limits properties
     ConvertBoolMT5toMT4 -value "CL_CloseOnProfitAndDD" -file $Destino
-    #; Pending entry properties
     ConvertBoolMT5toMT4 -value "Pending_CancelOnOpposite" -file $Destino
     ConvertBoolMT5toMT4 -value "Pending_DisableForOpposite" -file $Destino
     ConvertBoolMT5toMT4 -value "Pending_DeleteIfOpposite" -file $Destino
-    #; StopLoss properties
     ConvertBoolMT5toMT4 -value "UseVirtualSL" -file $Destino
-    #; TakeProfit properties
     ConvertBoolMT5toMT4 -value "GlobalTakeProfit_OnlyLock" -file $Destino
     ConvertBoolMT5toMT4 -value "UseVirtualTP" -file $Destino
-    #; Martingail properties
     ConvertBoolMT5toMT4 -value "MartingailOnTheBarEnd" -file $Destino
     ConvertBoolMT5toMT4 -value "UseOnlyOpenedTrades" -file $Destino
     ConvertBoolMT5toMT4 -value "ApplyAfterClosedLoss" -file $Destino
-    #; Anti-Martingale properties
     ConvertBoolMT5toMT4 -value "AntiMartingail_AllowTP" -file $Destino
     ConvertBoolMT5toMT4 -value "AllowBothMartinAndAntiMartin" -file $Destino
-    #; Partial close properties
     ConvertBoolMT5toMT4 -value "PartialClose_AnyToAny" -file $Destino
     ConvertBoolMT5toMT4 -value "PartialClose_CloseProfitItself" -file $Destino
     ConvertBoolMT5toMT4 -value "PartialCloseHedge_MainToMain" -file $Destino
     ConvertBoolMT5toMT4 -value "PartialCloseHedge_BothWays" -file $Destino
-    #; Big candle properties
     ConvertBoolMT5toMT4 -value "BigCandle_CurrentBar" -file $Destino
-    #; Oscillator #1 properties
     ConvertBoolMT5toMT4 -value "Oscillators_ContrTrend" -file $Destino
     ConvertBoolMT5toMT4 -value "Oscillators_UseClosedBars" -file $Destino
-    #; Oscillator #2 properties
     ConvertBoolMT5toMT4 -value "Oscillator2_ContrTrend" -file $Destino
     ConvertBoolMT5toMT4 -value "Oscillator2_UseClosedBars" -file $Destino
-    #; Oscillator #3 properties
     ConvertBoolMT5toMT4 -value "Oscillator3_ContrTrend" -file $Destino
     ConvertBoolMT5toMT4 -value "Oscillator3_UseClosedBars" -file $Destino
-    #; IdentifyTrend properties
     ConvertBoolMT5toMT4 -value "IdentifyTrend_Enable" -file $Destino
     ConvertBoolMT5toMT4 -value "IdentifyTrend_Reverse" -file $Destino
     ConvertBoolMT5toMT4 -value "IdentifyTrend_UseClosedBars" -file $Destino
-    #; TDI properties
     ConvertBoolMT5toMT4 -value "TDI_Reverse" -file $Destino
     ConvertBoolMT5toMT4 -value "TDI_UseClosedBars" -file $Destino
-    #; MACD properties
     ConvertBoolMT5toMT4 -value "MACD_Reverse" -file $Destino
     ConvertBoolMT5toMT4 -value "MACD_UseClosedBars" -file $Destino
-    #; MACD2 properties
     ConvertBoolMT5toMT4 -value "MACD2_Reverse" -file $Destino
     ConvertBoolMT5toMT4 -value "MACD2_UseClosedBars" -file $Destino
-    #; MACD3 properties
-    ConvertBoolMT5toMT4 -value "MACD3_Reverse" -file $Destino
-    ConvertBoolMT5toMT4 -value "MACD3_UseClosedBars" -file $Destino
-    #; ADX properties
     ConvertBoolMT5toMT4 -value "ADX_Reverse" -file $Destino
     ConvertBoolMT5toMT4 -value "ADX_UseClosedBars" -file $Destino
-    #; DTrend properties
     ConvertBoolMT5toMT4 -value "DTrend_Reverse" -file $Destino
     ConvertBoolMT5toMT4 -value "DTrend_UseClosedBars" -file $Destino
-    #; Parabolic SAR properties
     ConvertBoolMT5toMT4 -value "PSar_Reverse" -file $Destino
-    #; ZigZag properties
     ConvertBoolMT5toMT4 -value "ZZ_UsePrevExtremums" -file $Destino
     ConvertBoolMT5toMT4 -value "ZZ_Reverse" -file $Destino
     ConvertBoolMT5toMT4 -value "ZZ_UseClosedBars" -file $Destino
     ConvertBoolMT5toMT4 -value "ZZ_VisualizeLevels" -file $Destino
     ConvertBoolMT5toMT4 -value "ZZ_FillRectangle" -file $Destino
-    #; FIBO #1 properties
     ConvertBoolMT5toMT4 -value "FIBO_UseClosedBars" -file $Destino
-    #; FIBO #2 properties
     ConvertBoolMT5toMT4 -value "FIB2_UseClosedBars" -file $Destino
-    #; Custom Schedule
     ConvertBoolMT5toMT4 -value "Custom_Schedule_On" -file $Destino
-    #; News settings
     ConvertBoolMT5toMT4 -value "News_Impact_H" -file $Destino
     ConvertBoolMT5toMT4 -value "News_Impact_M" -file $Destino
     ConvertBoolMT5toMT4 -value "News_Impact_L" -file $Destino
     ConvertBoolMT5toMT4 -value "News_Impact_N" -file $Destino
     ConvertBoolMT5toMT4 -value "News_ShowOnChart" -file $Destino
-    #; GUI settings
     ConvertBoolMT5toMT4 -value "GUI_Enabled" -file $Destino
     ConvertBoolMT5toMT4 -value "GUI_ShowSignals" -file $Destino
-    #; Show orders
     ConvertBoolMT5toMT4 -value "Show_Closed" -file $Destino
     ConvertBoolMT5toMT4 -value "Show_Pending" -file $Destino
     ConvertBoolMT5toMT4 -value "Profit_ShowInMoney" -file $Destino
@@ -278,12 +312,11 @@ function MainConvert2MT4 ([string]$filePath) {
     ConvertBoolMT5toMT4 -value "Profit_ShowInPercents" -file $Destino
     ConvertBoolMT5toMT4 -value "Profit_Aggregate" -file $Destino
     ConvertBoolMT5toMT4 -value "SL_TP_Dashes_Show" -file $Destino
-    #; Notifications settings
     ConvertBoolMT5toMT4 -value "MessagesToGrammy" -file $Destino
     ConvertBoolMT5toMT4 -value "Alerts_Enabled" -file $Destino
     ConvertBoolMT5toMT4 -value "Sounds_Enabled" -file $Destino
 
-    Write-Output "Successfully Converted MT5 To MT4"
+    return [bool]$true
 }
 
 #######################GUI################################################################
@@ -347,16 +380,19 @@ $button_Click = {
     foreach ($item in $listBox.Items) {
         $i = Get-Item -LiteralPath $item
         if (!($i -is [System.IO.DirectoryInfo])) {
-            MainConvert2MT4 -file $item
-            [System.Windows.Forms.MessageBox]::Show('Successfully convert MT5 to MT4 Community Power EA', 'Convert from MT5 to MT4', 0, 64)
+            if (MainConvert2MT4 -file $item) {
+                [System.Windows.Forms.MessageBox]::Show('Successfully convert MT5 to MT4 Community Power EA', 'Convert from MT5 to MT4', 0, 64)
+                $statusBar.Text = "Successfully"
+            }
+            else {
+                [System.Windows.Forms.MessageBox]::Show('ERROR . Check the TimeFrame', 'Convert from MT5 to MT4', 0, 16)
+                $statusBar.Text = "ERROR"
+            }
         }
     }
-
     if ($checkbox.Checked -eq $True) {
         $listBox.Items.Clear()
     }
-
-    $statusBar.Text = ("List contains $($listBox.Items.Count) items")
 }
 
 $listBox_DragOver = [System.Windows.Forms.DragEventHandler] {
