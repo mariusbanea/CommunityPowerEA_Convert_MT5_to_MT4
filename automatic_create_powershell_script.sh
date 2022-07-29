@@ -20,7 +20,9 @@ for i in $(cat cp2.48.txt) ; do
 		fi
 	fi
 done
-
+echo "Set-OrAddIniValue -FilePath \$Destino  -keyValueList @{"
+echo "	ADX_Price = \"0\""
+echo "}"
 echo " "
 echo "#Convert Price"
 for i in $(cat cp2.48.txt) ; do

@@ -244,6 +244,9 @@ function MainConvert2MT4 ([string]$filePath) {
     ConvertPriceMT5toMT4 -value "MA_Filter_1_Price" -file $Destino
     ConvertPriceMT5toMT4 -value "MA_Filter_2_Price" -file $Destino
     ConvertPriceMT5toMT4 -value "MA_Filter_3_Price" -file $Destino
+    Set-OrAddIniValue -FilePath $Destino  -keyValueList @{
+        ADX_Price = "0"
+    }
 
     #Convert Bool (true/false)
     ConvertBoolMT5toMT4 -value "ShowVirtualInfoOnChart" -file $Destino
