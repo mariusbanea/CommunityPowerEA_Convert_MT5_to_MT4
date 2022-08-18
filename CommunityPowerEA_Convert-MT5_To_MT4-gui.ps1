@@ -2,11 +2,14 @@
 # Drag and Drop file in Windows Forms and press button
 #
 # Autor: Ulises Cune (@Ulises2k)
-# v1.4
+# v1.5
 #
 #
 #######################CONSOLE################################################################
-Function Get-IniFile ($file) {
+Function Get-IniFile {
+    Param(
+        [string]$file
+    )
     $ini = [ordered]@{}
     switch -regex -file $file {
         "^\s*(.+?)\s*=\s*(.*)$" {
@@ -27,7 +30,10 @@ Function Get-IniFile ($file) {
     $ini
 }
 
-Function ConvertINItoProfileVersion ([string]$FilePath) {
+Function ConvertINItoProfileVersion {
+    Param(
+        [string]$FilePath
+    )
     $content = Get-Content $FilePath
     switch -regex -file $FilePath {
         "^\s*(.+?)\s*=\s*(.*)$" {
@@ -35,10 +41,10 @@ Function ConvertINItoProfileVersion ([string]$FilePath) {
             # skip comments that start with semicolon:
             if (!($name.StartsWith(";"))) {
                 if ($value.Contains('||') ) {
-                    $content = $content -replace "$($name)\s*=(.*)", "$($name)=$($value.Split('||')[0])"
+                    $content = $content -replace "^$($name)\s*=(.*)", "$($name)=$($value.Split('||')[0])"
                 }
                 else {
-                    $content = $content -replace "$($name)\s*=(.*)", "$($name)=$($value)"
+                    $content = $content -replace "^$($name)\s*=(.*)", "$($name)=$($value)"
                 }
             }
         }
@@ -51,7 +57,6 @@ function Set-OrAddIniValue {
         [string]$FilePath,
         [hashtable]$keyValueList
     )
-
     $content = Get-Content $FilePath
     $keyValueList.GetEnumerator() | ForEach-Object {
         if ($content -match "^$($_.Key)\s*=") {
@@ -65,7 +70,11 @@ function Set-OrAddIniValue {
     $content | Set-Content $FilePath
 }
 
-function ConvertTFMT5toMT4 ([string]$value , [string]$file) {
+function ConvertTFMT5toMT4 {
+    Param(
+        [string]$value,
+        [string]$file
+    )
     $inifile = Get-IniFile($file)
     $rvalue = [int]$inifile[$value]
     #MT5 TimeFrame are not in MT4
@@ -126,7 +135,11 @@ function ConvertTFMT5toMT4 ([string]$value , [string]$file) {
 
 }
 
-function ConvertPriceMT5toMT4 ([string]$value, [string]$file) {
+function ConvertPriceMT5toMT4 {
+    Param(
+        [string]$value,
+        [string]$file
+    )
     #Close Price = 1 => 0
     #Open Price = 2 => 1
     #High Price = 3 => 2
@@ -143,7 +156,11 @@ function ConvertPriceMT5toMT4 ([string]$value, [string]$file) {
 }
 
 #Profile settings use true/false. Tester setting use 1/0. I convert to profile for default
-function ConvertBoolMT5toMT4 ([string]$value, [string]$file) {
+function ConvertBoolMT5toMT4 {
+    Param(
+        [string]$value,
+        [string]$file
+    )
     $inifile = Get-IniFile($file)
 
     if ([string]$inifile[$value] -eq "0") {
@@ -159,8 +176,10 @@ function ConvertBoolMT5toMT4 ([string]$value, [string]$file) {
     }
 }
 
-function MainConvert2MT4 ([string]$filePath) {
-
+function MainConvert2MT4 {
+    Param(
+        [string]$filePath
+    )
     $Destino = (Get-Item $filePath).BaseName + "-MT4.set"
     $CurrentDir = Split-Path -Path "$filePath"
     Copy-Item "$filePath" -Destination "$CurrentDir\$Destino"
@@ -340,8 +359,7 @@ $form.Topmost = $True
 # Button
 $button = New-Object System.Windows.Forms.Button
 $button.Location = '5,5'
-$button.Size = '75,23'
-$button.Width = 120
+$button.Size = '120,23'
 $button.Text = "Convert to MT4"
 
 # Checkbox
@@ -359,8 +377,7 @@ $label.Text = "Drag and Drop files settings MT5 here:"
 # Listbox
 $listBox = New-Object System.Windows.Forms.ListBox
 $listBox.Location = '5,60'
-$listBox.Height = 200
-$listBox.Width = 480
+$listBox.Size = '480,200'
 $listBox.Anchor = ([System.Windows.Forms.AnchorStyles]::Bottom -bor [System.Windows.Forms.AnchorStyles]::Left -bor [System.Windows.Forms.AnchorStyles]::Right -bor [System.Windows.Forms.AnchorStyles]::Top)
 $listBox.IntegralHeight = $False
 $listBox.AllowDrop = $True
@@ -389,7 +406,7 @@ $button_Click = {
             }
             else {
                 [System.Windows.Forms.MessageBox]::Show('ERROR . Check the TimeFrame', 'Convert from MT5 to MT4', 0, 16)
-                $statusBar.Text = "ERROR"
+                $statusBar.Text = "ERROR. Verify the TimeFrames"
             }
         }
     }
@@ -400,7 +417,6 @@ $button_Click = {
 
 $listBox_DragOver = [System.Windows.Forms.DragEventHandler] {
     if ($_.Data.GetDataPresent([Windows.Forms.DataFormats]::FileDrop)) {
-        # $_ = [System.Windows.Forms.DragEventArgs]
         $_.Effect = 'Copy'
     }
     else {
@@ -410,7 +426,6 @@ $listBox_DragOver = [System.Windows.Forms.DragEventHandler] {
 
 $listBox_DragDrop = [System.Windows.Forms.DragEventHandler] {
     foreach ($filename in $_.Data.GetData([Windows.Forms.DataFormats]::FileDrop)) {
-        # $_ = [System.Windows.Forms.DragEventArgs]
         $listBox.Items.Add($filename)
     }
     $statusBar.Text = ("List contains $($listBox.Items.Count) items")
