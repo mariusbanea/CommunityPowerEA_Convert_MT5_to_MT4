@@ -2,7 +2,7 @@
 # Drag and Drop file in Windows Forms and press button
 #
 # Autor: Ulises Cune (@Ulises2k)
-# v1.5
+# v1.6
 #
 #
 #######################CONSOLE################################################################
@@ -60,13 +60,12 @@ function Set-OrAddIniValue {
     $content = Get-Content $FilePath
     $keyValueList.GetEnumerator() | ForEach-Object {
         if ($content -match "^$($_.Key)\s*=") {
-            $content = $content -replace "$($_.Key)\s*=(.*)", "$($_.Key)=$($_.Value)"
+            $content = $content -replace "^$($_.Key)\s*=(.*)", "$($_.Key)=$($_.Value)"
         }
         else {
             $content += "$($_.Key)=$($_.Value)"
         }
     }
-
     $content | Set-Content $FilePath
 }
 
@@ -98,35 +97,35 @@ function ConvertTFMT5toMT4 {
 
     #1 Hour
     if ($rvalue -eq 16385) {
-        Set-OrAddIniValue -FilePath $file  -keyValueList @{
+        Set-OrAddIniValue -FilePath $file -keyValueList @{
             $value = "60"
         }
     }
 
     #4 Hour
     if ($rvalue -eq 16388) {
-        Set-OrAddIniValue -FilePath $file  -keyValueList @{
+        Set-OrAddIniValue -FilePath $file -keyValueList @{
             $value = "240"
         }
     }
 
     #1 Day
     if ($rvalue -eq 16408) {
-        Set-OrAddIniValue -FilePath $file  -keyValueList @{
+        Set-OrAddIniValue -FilePath $file -keyValueList @{
             $value = "1440"
         }
     }
 
     #1 Week - Signal_TimeFrame= 32769 -> 10080
     if ($rvalue -eq 32769) {
-        Set-OrAddIniValue -FilePath $file  -keyValueList @{
+        Set-OrAddIniValue -FilePath $file -keyValueList @{
             $value = "10080"
         }
     }
 
     #1 Month - Signal_TimeFrame= 49153 -> 43200
     if ($rvalue -eq 49153) {
-        Set-OrAddIniValue -FilePath $file  -keyValueList @{
+        Set-OrAddIniValue -FilePath $file -keyValueList @{
             $value = "43200"
         }
     }
@@ -150,7 +149,7 @@ function ConvertPriceMT5toMT4 {
     $inifile = Get-IniFile($file)
     $rvalue = [int]$inifile[$value]
     $rvalue = $rvalue - 1
-    Set-OrAddIniValue -FilePath $file  -keyValueList @{
+    Set-OrAddIniValue -FilePath $file -keyValueList @{
         $value = [string]$rvalue
     }
 }
@@ -164,13 +163,13 @@ function ConvertBoolMT5toMT4 {
     $inifile = Get-IniFile($file)
 
     if ([string]$inifile[$value] -eq "0") {
-        Set-OrAddIniValue -FilePath $file  -keyValueList @{
+        Set-OrAddIniValue -FilePath $file -keyValueList @{
             $value = "false"
         }
     }
 
     if ([string]$inifile[$value] -eq "1") {
-        Set-OrAddIniValue -FilePath $file  -keyValueList @{
+        Set-OrAddIniValue -FilePath $file -keyValueList @{
             $value = "true"
         }
     }
@@ -189,67 +188,73 @@ function MainConvert2MT4 {
 
     #Convert TimeFrame
     if (!(ConvertTFMT5toMT4 -value "Signal_TimeFrame" -file $Destino)) {
-        return [bool]$false
+        return [bool]$false, 'Signal_TimeFrame'
     }
     if (!(ConvertTFMT5toMT4 -value "VolPV_TF" -file $Destino)) {
-        return [bool]$false
+        return [bool]$false, 'VolPV_TF'
     }
     if (!(ConvertTFMT5toMT4 -value "BigCandle_TF" -file $Destino)) {
-        return [bool]$false
+        return [bool]$false, 'BigCandle_TF'
     }
     if (!(ConvertTFMT5toMT4 -value "Oscillators_TF" -file $Destino)) {
-        return [bool]$false
+        return [bool]$false, 'Oscillators_TF'
     }
     if (!(ConvertTFMT5toMT4 -value "Oscillator2_TF" -file $Destino)) {
-        return [bool]$false
+        return [bool]$false, 'Oscillator2_TF'
     }
     if (!(ConvertTFMT5toMT4 -value "Oscillator3_TF" -file $Destino)) {
-        return [bool]$false
+        return [bool]$false, 'Oscillator3_TF'
     }
     if (!(ConvertTFMT5toMT4 -value "IdentifyTrend_TF" -file $Destino)) {
-        return [bool]$false
+        return [bool]$false, 'IdentifyTrend_TF'
     }
     if (!(ConvertTFMT5toMT4 -value "TDI_TF" -file $Destino)) {
-        return [bool]$false
+        return [bool]$false, 'TDI_TF'
     }
     if (!(ConvertTFMT5toMT4 -value "MACD_TF" -file $Destino)) {
-        return [bool]$false
+        return [bool]$false, 'MACD_TF'
     }
     if (!(ConvertTFMT5toMT4 -value "MACD2_TF" -file $Destino)) {
-        return [bool]$false
+        return [bool]$false, 'MACD2_TF'
     }
     if (!(ConvertTFMT5toMT4 -value "ADX_TF" -file $Destino)) {
-        return [bool]$false
+        return [bool]$false, 'ADX_TF'
     }
     if (!(ConvertTFMT5toMT4 -value "DTrend_TF" -file $Destino)) {
-        return [bool]$false
+        return [bool]$false, 'DTrend_TF'
     }
     if (!(ConvertTFMT5toMT4 -value "PSar_TF" -file $Destino)) {
-        return [bool]$false
+        return [bool]$false, 'PSar_TF'
     }
     if (!(ConvertTFMT5toMT4 -value "MA_Filter_1_TF" -file $Destino)) {
-        return [bool]$false
+        return [bool]$false, 'MA_Filter_1_TF'
     }
     if (!(ConvertTFMT5toMT4 -value "MA_Filter_2_TF" -file $Destino)) {
-        return [bool]$false
+        return [bool]$false, 'MA_Filter_2_TF'
     }
     if (!(ConvertTFMT5toMT4 -value "MA_Filter_3_TF" -file $Destino)) {
-        return [bool]$false
+        return [bool]$false, 'MA_Filter_3_TF'
     }
     if (!(ConvertTFMT5toMT4 -value "ZZ_TF" -file $Destino)) {
-        return [bool]$false
+        return [bool]$false, 'ZZ_TF'
     }
     if (!(ConvertTFMT5toMT4 -value "VolMA_TF" -file $Destino)) {
-        return [bool]$false
+        return [bool]$false, 'VolMA_TF'
     }
     if (!(ConvertTFMT5toMT4 -value "VolFilter_TF" -file $Destino)) {
-        return [bool]$false
+        return [bool]$false, 'VolFilter_TF'
     }
     if (!(ConvertTFMT5toMT4 -value "FIBO_TF" -file $Destino)) {
-        return [bool]$false
+        return [bool]$false, 'FIBO_TF'
     }
     if (!(ConvertTFMT5toMT4 -value "FIB2_TF" -file $Destino)) {
-        return [bool]$false
+        return [bool]$false, 'FIB2_TF'
+    }
+    if (!(ConvertTFMT5toMT4 -value "CustomIndy1_TF" -file $Destino)) {
+        return [bool]$false, 'CustomIndy1_TF'
+    }
+    if (!(ConvertTFMT5toMT4 -value "CustomIndy2_TF" -file $Destino)) {
+        return [bool]$false, 'CustomIndy2_TF'
     }
 
     #Convert Price
@@ -319,6 +324,16 @@ function MainConvert2MT4 {
     ConvertBoolMT5toMT4 -value "ZZ_FillRectangle" -file $Destino
     ConvertBoolMT5toMT4 -value "FIBO_UseClosedBars" -file $Destino
     ConvertBoolMT5toMT4 -value "FIB2_UseClosedBars" -file $Destino
+    ConvertBoolMT5toMT4 -value "CustomIndy1_Reverse" -file $Destino
+    ConvertBoolMT5toMT4 -value "CustomIndy1_UseClosedBars" -file $Destino
+    ConvertBoolMT5toMT4 -value "CustomIndy1_DrawInSubwindow" -file $Destino
+    ConvertBoolMT5toMT4 -value "CustomIndy1_AllowNegativeAndZero" -file $Destino
+    ConvertBoolMT5toMT4 -value "CustomIndy2_Reverse" -file $Destino
+    ConvertBoolMT5toMT4 -value "CustomIndy2_UseClosedBars" -file $Destino
+    ConvertBoolMT5toMT4 -value "CustomIndy2_DrawInSubwindow" -file $Destino
+    ConvertBoolMT5toMT4 -value "CustomIndy2_AllowNegativeAndZero" -file $Destino
+    ConvertBoolMT5toMT4 -value "Spread_ApplyToFirst" -file $Destino
+    ConvertBoolMT5toMT4 -value "Spread_ApplyToMartin" -file $Destino
     ConvertBoolMT5toMT4 -value "Custom_Schedule_On" -file $Destino
     ConvertBoolMT5toMT4 -value "News_Impact_H" -file $Destino
     ConvertBoolMT5toMT4 -value "News_Impact_M" -file $Destino
@@ -349,7 +364,7 @@ function MainConvert2MT4 {
 ### Create form ###
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "Convert from MT5 to MT4 - CommunityPower EA"
-$form.Size = '512,320'
+$form.Size = '800,320'
 $form.StartPosition = "CenterScreen"
 $form.MinimumSize = $form.Size
 $form.MaximizeBox = $False
@@ -362,22 +377,22 @@ $button.Location = '5,5'
 $button.Size = '120,23'
 $button.Text = "Convert to MT4"
 
-# Checkbox
-$checkbox = New-Object System.Windows.Forms.Checkbox
-$checkbox.Location = '140,8'
-$checkbox.AutoSize = $True
-$checkbox.Text = "Clear afterwards"
+# Button
+$button2 = New-Object System.Windows.Forms.Button
+$button2.Location = '5,30'
+$button2.Size = '75,23'
+$button2.Text = "Clear"
 
 # Label
 $label = New-Object System.Windows.Forms.Label
-$label.Location = '5,40'
+$label.Location = '5,60'
 $label.AutoSize = $True
-$label.Text = "Drag and Drop files settings MT5 here:"
+$label.Text = "Drag and Drop MT5 files settings here:"
 
 # Listbox
 $listBox = New-Object System.Windows.Forms.ListBox
-$listBox.Location = '5,60'
-$listBox.Size = '480,200'
+$listBox.Location = '5,80'
+$listBox.Size = '760,180'
 $listBox.Anchor = ([System.Windows.Forms.AnchorStyles]::Bottom -bor [System.Windows.Forms.AnchorStyles]::Left -bor [System.Windows.Forms.AnchorStyles]::Right -bor [System.Windows.Forms.AnchorStyles]::Top)
 $listBox.IntegralHeight = $False
 $listBox.AllowDrop = $True
@@ -389,7 +404,7 @@ $statusBar.Text = "Ready"
 ### Add controls to form ###
 $form.SuspendLayout()
 $form.Controls.Add($button)
-$form.Controls.Add($checkbox)
+$form.Controls.Add($button2)
 $form.Controls.Add($label)
 $form.Controls.Add($listBox)
 $form.Controls.Add($statusBar)
@@ -400,19 +415,22 @@ $button_Click = {
     foreach ($item in $listBox.Items) {
         $i = Get-Item -LiteralPath $item
         if (!($i -is [System.IO.DirectoryInfo])) {
-            if (MainConvert2MT4 -file $item) {
+            $status, $TF = MainConvert2MT4 -file $item
+            if ($status) {
                 [System.Windows.Forms.MessageBox]::Show('Successfully convert MT5 to MT4 Community Power EA', 'Convert from MT5 to MT4', 0, 64)
                 $statusBar.Text = "Successfully"
             }
             else {
-                [System.Windows.Forms.MessageBox]::Show('ERROR . Check the TimeFrame', 'Convert from MT5 to MT4', 0, 16)
-                $statusBar.Text = "ERROR. Verify the TimeFrames"
+                [System.Windows.Forms.MessageBox]::Show('ERROR . Check ' + $TF , 'Convert from MT5 to MT4', 0, 16)
+                $statusBar.Text = "ERROR. Verify " + $TF
             }
         }
     }
-    if ($checkbox.Checked -eq $True) {
-        $listBox.Items.Clear()
-    }
+}
+
+$button2_Click = {
+    $listBox.Items.Clear()
+    $statusBar.Text = ""
 }
 
 $listBox_DragOver = [System.Windows.Forms.DragEventHandler] {
@@ -433,6 +451,7 @@ $listBox_DragDrop = [System.Windows.Forms.DragEventHandler] {
 
 ### Wire up events ###
 $button.Add_Click($button_Click)
+$button2.Add_Click($button2_Click)
 $listBox.Add_DragOver($listBox_DragOver)
 $listBox.Add_DragDrop($listBox_DragDrop)
 

@@ -1,12 +1,12 @@
 #!/bin/bash
 
 echo "#Convert TimeFrame"
-for i in $(cat cp2.48.txt) ; do
+for i in $(cat cp2.49.3_mt5.txt) ; do
 	value=$(echo $i | grep "Signal_TimeFrame" | cut -f1 -d"=")
 	if [ $? -eq 0 ] ; then
 		if [ ! -z $value ] ; then
 			echo "if (!(ConvertTFMT5toMT4 -value "\"$value\"" -file \$Destino)) {"
-			echo "	return [bool]\$false"
+			echo "	return [bool]\$false,'$value'"
 			echo "}"
 		fi
 	fi
@@ -15,18 +15,15 @@ for i in $(cat cp2.48.txt) ; do
 	if [ $? -eq 0 ] ; then
 		if [ ! -z $value ] ; then
 			echo "if (!(ConvertTFMT5toMT4 -value "\"$value\"" -file \$Destino)) {"
-			echo "	return [bool]\$false"
+			echo "	return [bool]\$false,'$value'"
 			echo "}"
 		fi
 	fi
 done
-echo "Set-OrAddIniValue -FilePath \$Destino  -keyValueList @{"
-echo "	ADX_Price = \"0\""
-echo "}"
 echo " "
 echo "#Convert Price"
-for i in $(cat cp2.48.txt) ; do
-	value=$(echo $i | grep "Price" | cut -f1 -d"=")
+for i in $(cat cp2.49.3_mt5.txt) ; do
+	value=$(echo $i | grep "Price" | grep -vi "ADX_Price" | cut -f1 -d"=")
 	if [ $? -eq 0 ] ; then
 		if [ ! -z $value ] ; then
 			if [ "$value" != "Oscillators_STO_Price" ] ; then
@@ -43,9 +40,12 @@ for i in $(cat cp2.48.txt) ; do
 		fi
 	fi
 done
+echo "Set-OrAddIniValue -FilePath \$Destino  -keyValueList @{"
+echo "	ADX_Price = \"0\""
+echo "}"
 echo " "
 echo "#Convert Bool (true/false)"
-for i in $(cat cp2.48.txt) ; do
+for i in $(cat cp2.49.3_mt5.txt) ; do
 	value1=$(echo $i | grep "false" | cut -f1 -d"=")
 	if [ $? -eq 0 ] ; then
 		if [ ! -z $value1 ] ; then
