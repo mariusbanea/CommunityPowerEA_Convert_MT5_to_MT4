@@ -2,7 +2,7 @@
 # Drag and Drop file in Windows Forms and press button
 #
 # Autor: Ulises Cune (@Ulises2k)
-# v1.6
+# v1.7
 #
 #
 #######################CONSOLE################################################################
@@ -279,6 +279,7 @@ function MainConvert2MT4 {
     ConvertBoolMT5toMT4 -value "NewDealOnNewBar" -file $Destino
     ConvertBoolMT5toMT4 -value "ManageManual" -file $Destino
     ConvertBoolMT5toMT4 -value "AllowHedge" -file $Destino
+    ConvertBoolMT5toMT4 -value "RiskPerCurrency_UseSemaphor" -file $Destino
     ConvertBoolMT5toMT4 -value "GlobalAccountStopTillTomorrow" -file $Destino
     ConvertBoolMT5toMT4 -value "CL_CloseOnProfitAndDD" -file $Destino
     ConvertBoolMT5toMT4 -value "Pending_CancelOnOpposite" -file $Destino

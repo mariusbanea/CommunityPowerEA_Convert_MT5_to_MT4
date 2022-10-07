@@ -1,7 +1,12 @@
 #!/bin/bash
 
+CP="cp2.49_mt5.txt"
+CP_OUT="$CP_ansi.txt"
+
+tr -d '\0' < $CP > $CP_OUT
+
 echo "#Convert TimeFrame"
-for i in $(cat cp2.49.3_mt5.txt) ; do
+for i in $(cat $CP_OUT) ; do
 	value=$(echo $i | grep "Signal_TimeFrame" | cut -f1 -d"=")
 	if [ $? -eq 0 ] ; then
 		if [ ! -z $value ] ; then
@@ -22,7 +27,7 @@ for i in $(cat cp2.49.3_mt5.txt) ; do
 done
 echo " "
 echo "#Convert Price"
-for i in $(cat cp2.49.3_mt5.txt) ; do
+for i in $(cat $CP_OUT) ; do
 	value=$(echo $i | grep "Price" | grep -vi "ADX_Price" | cut -f1 -d"=")
 	if [ $? -eq 0 ] ; then
 		if [ ! -z $value ] ; then
@@ -45,7 +50,7 @@ echo "	ADX_Price = \"0\""
 echo "}"
 echo " "
 echo "#Convert Bool (true/false)"
-for i in $(cat cp2.49.3_mt5.txt) ; do
+for i in $(cat $CP_OUT) ; do
 	value1=$(echo $i | grep "false" | cut -f1 -d"=")
 	if [ $? -eq 0 ] ; then
 		if [ ! -z $value1 ] ; then
