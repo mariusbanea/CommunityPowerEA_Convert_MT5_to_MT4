@@ -1,0 +1,11 @@
+En Windows
+copy /Y automatic_create_powershell_script_MT5_to_MT4.sh c:\temp
+copy /Y cp2.49-mt5.txt c:\temp
+
+En Linux
+cp /mnt/c/temp/automatic_create_powershell_script_MT5_to_MT4.sh .
+cp /mnt/c/temp/cp2.49-mt5.txt .
+bash automatic_create_powershell_script_MT5_to_MT4.sh > mt5_to_mt4.ps1
+cp mt5_to_mt4.ps1 /mnt/c/temp/
+
+Coparar mt5_to_mt4.ps1 con CommunityPowerEA_Convert_MT5_to_MT4.ps1
