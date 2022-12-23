@@ -1,9 +1,9 @@
 #!/bin/bash
 
-CP="cp2.49_mt5.txt"
-CP_OUT="$CP_ansi.txt"
+CP="default-v2.50.4-MT5.set"
+CP_OUT=$CP-ansi.txt
 
-tr -d '\0' < $CP > $CP_OUT
+cat $CP | tr -d '\0' > $CP_OUT
 
 echo "#Convert TimeFrame"
 for i in $(cat $CP_OUT) ; do
@@ -11,7 +11,7 @@ for i in $(cat $CP_OUT) ; do
 	if [ $? -eq 0 ] ; then
 		if [ ! -z $value ] ; then
 			echo "if (!(ConvertTFMT5toMT4 -value "\"$value\"" -file \$Destino)) {"
-			echo "	return [bool]\$false,'$value'"
+			echo "	return [bool]\$false, '$value'"
 			echo "}"
 		fi
 	fi
@@ -20,7 +20,7 @@ for i in $(cat $CP_OUT) ; do
 	if [ $? -eq 0 ] ; then
 		if [ ! -z $value ] ; then
 			echo "if (!(ConvertTFMT5toMT4 -value "\"$value\"" -file \$Destino)) {"
-			echo "	return [bool]\$false,'$value'"
+			echo "	return [bool]\$false, '$value'"
 			echo "}"
 		fi
 	fi
@@ -50,17 +50,10 @@ echo "	ADX_Price = \"0\""
 echo "}"
 echo " "
 echo "#Convert Bool (true/false)"
-for i in $(cat $CP_OUT) ; do
-	value1=$(echo $i | grep "false" | cut -f1 -d"=")
-	if [ $? -eq 0 ] ; then
-		if [ ! -z $value1 ] ; then
-			echo ConvertBoolMT5toMT4 -value "\"$value1\"" -file \$Destino
-		fi
-	fi
-	value2=$(echo $i | grep "true" | cut -f1 -d"=")
-	if [ $? -eq 0 ] ; then
-		if [ ! -z $value2 ] ; then
-			echo ConvertBoolMT5toMT4 -value "\"$value2\"" -file \$Destino
-		fi
-	fi
+for i in $(cat $CP_OUT | grep -i "=false" | cut -f1 -d"=") ; do
+	echo ConvertBoolMT5toMT4 -value "\"$i\"" -file \$Destino
+done
+
+for x in $(cat $CP_OUT | grep "=true" | cut -f1 -d"=") ; do
+	echo ConvertBoolMT5toMT4 -value "\"$x\"" -file \$Destino	
 done
