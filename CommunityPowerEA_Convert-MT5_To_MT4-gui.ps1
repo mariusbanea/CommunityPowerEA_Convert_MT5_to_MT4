@@ -179,9 +179,14 @@ function MainConvert2MT4 {
     Param(
         [string]$filePath
     )
+	
     $Destino = (Get-Item $filePath).BaseName + "-MT4.set"
     $CurrentDir = Split-Path -Path "$filePath"
     Copy-Item "$filePath" -Destination "$CurrentDir\$Destino"
+	
+	if(!(Test-Path -Path "$CurrentDir\$Destino")){
+		return [bool]$false, 'Cant copy file. Reduce the PATH: $CurrentDir . Move the file, for example to C:\temp'
+	}
 
     $Destino = "$CurrentDir\$Destino"
     ConvertINItoProfileVersion -FilePath $Destino
@@ -422,8 +427,8 @@ $button_Click = {
                 $statusBar.Text = "Successfully"
             }
             else {
-                [System.Windows.Forms.MessageBox]::Show('ERROR . Check ' + $TF , 'Convert from MT5 to MT4', 0, 16)
-                $statusBar.Text = "ERROR. Verify " + $TF
+                [System.Windows.Forms.MessageBox]::Show('ERROR. ' + $TF , 'Convert from MT5 to MT4', 0, 16)
+                $statusBar.Text = "ERROR." + $TF
             }
         }
     }
