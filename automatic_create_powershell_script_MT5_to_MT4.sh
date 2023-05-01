@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CP="default-v2.50.4-MT5.set"
+CP="default_v2.53.1-MT5.set"
 CP_OUT=$CP-ansi.txt
 
 cat $CP | tr -d '\0' > $CP_OUT
@@ -55,5 +55,5 @@ for i in $(cat $CP_OUT | grep -i "=false" | cut -f1 -d"=") ; do
 done
 
 for x in $(cat $CP_OUT | grep "=true" | cut -f1 -d"=") ; do
-	echo ConvertBoolMT5toMT4 -value "\"$x\"" -file \$Destino	
+	echo ConvertBoolMT5toMT4 -value "\"$x\"" -file \$Destino
 done

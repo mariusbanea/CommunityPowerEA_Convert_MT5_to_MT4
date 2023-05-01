@@ -2,7 +2,7 @@
 # Drag and Drop file in Windows Forms and press button
 #
 # Autor: Ulises Cune (@Ulises2k)
-# v1.8
+# v1.9
 #
 #
 #######################CONSOLE################################################################
@@ -179,188 +179,190 @@ function MainConvert2MT4 {
     Param(
         [string]$filePath
     )
-	
     $Destino = (Get-Item $filePath).BaseName + "-MT4.set"
     $CurrentDir = Split-Path -Path "$filePath"
     Copy-Item "$filePath" -Destination "$CurrentDir\$Destino"
-	
-	if(!(Test-Path -Path "$CurrentDir\$Destino")){
-		return [bool]$false, 'Cant copy file. Reduce the PATH: $CurrentDir . Move the file, for example to C:\temp'
-	}
 
     $Destino = "$CurrentDir\$Destino"
     ConvertINItoProfileVersion -FilePath $Destino
 
     #Convert TimeFrame
-	if (!(ConvertTFMT5toMT4 -value "Signal_TimeFrame" -file $Destino)) {
-		return [bool]$false, 'Signal_TimeFrame'
-	}
-	if (!(ConvertTFMT5toMT4 -value "VolPV_TF" -file $Destino)) {
-		return [bool]$false, 'VolPV_TF'
-	}
-	if (!(ConvertTFMT5toMT4 -value "BigCandle_TF" -file $Destino)) {
-		return [bool]$false, 'BigCandle_TF'
-	}
-	if (!(ConvertTFMT5toMT4 -value "Oscillators_TF" -file $Destino)) {
-		return [bool]$false, 'Oscillators_TF'
-	}
-	if (!(ConvertTFMT5toMT4 -value "Oscillator2_TF" -file $Destino)) {
-		return [bool]$false, 'Oscillator2_TF'
-	}
-	if (!(ConvertTFMT5toMT4 -value "Oscillator3_TF" -file $Destino)) {
-		return [bool]$false, 'Oscillator3_TF'
-	}
-	if (!(ConvertTFMT5toMT4 -value "IdentifyTrend_TF" -file $Destino)) {
-		return [bool]$false, 'IdentifyTrend_TF'
-	}
-	if (!(ConvertTFMT5toMT4 -value "TDI_TF" -file $Destino)) {
-		return [bool]$false, 'TDI_TF'
-	}
-	if (!(ConvertTFMT5toMT4 -value "MACD_TF" -file $Destino)) {
-		return [bool]$false, 'MACD_TF'
-	}
-	if (!(ConvertTFMT5toMT4 -value "MACD2_TF" -file $Destino)) {
-		return [bool]$false, 'MACD2_TF'
-	}
-	if (!(ConvertTFMT5toMT4 -value "ADX_TF" -file $Destino)) {
-		return [bool]$false, 'ADX_TF'
-	}
-	if (!(ConvertTFMT5toMT4 -value "DTrend_TF" -file $Destino)) {
-		return [bool]$false, 'DTrend_TF'
-	}
-	if (!(ConvertTFMT5toMT4 -value "PSar_TF" -file $Destino)) {
-		return [bool]$false, 'PSar_TF'
-	}
-	if (!(ConvertTFMT5toMT4 -value "MA_Filter_1_TF" -file $Destino)) {
-		return [bool]$false, 'MA_Filter_1_TF'
-	}
-	if (!(ConvertTFMT5toMT4 -value "MA_Filter_2_TF" -file $Destino)) {
-		return [bool]$false, 'MA_Filter_2_TF'
-	}
-	if (!(ConvertTFMT5toMT4 -value "MA_Filter_3_TF" -file $Destino)) {
-		return [bool]$false, 'MA_Filter_3_TF'
-	}
-	if (!(ConvertTFMT5toMT4 -value "ZZ_TF" -file $Destino)) {
-		return [bool]$false, 'ZZ_TF'
-	}
-	if (!(ConvertTFMT5toMT4 -value "VolMA_TF" -file $Destino)) {
-		return [bool]$false, 'VolMA_TF'
-	}
-	if (!(ConvertTFMT5toMT4 -value "VolFilter_TF" -file $Destino)) {
-		return [bool]$false, 'VolFilter_TF'
-	}
-	if (!(ConvertTFMT5toMT4 -value "FIBO_TF" -file $Destino)) {
-		return [bool]$false, 'FIBO_TF'
-	}
-	if (!(ConvertTFMT5toMT4 -value "FIB2_TF" -file $Destino)) {
-		return [bool]$false, 'FIB2_TF'
-	}
-	if (!(ConvertTFMT5toMT4 -value "CustomIndy1_TF" -file $Destino)) {
-		return [bool]$false, 'CustomIndy1_TF'
-	}
-	if (!(ConvertTFMT5toMT4 -value "CustomIndy2_TF" -file $Destino)) {
-		return [bool]$false, 'CustomIndy2_TF'
-	}
-	 
-	#Convert Price
-	ConvertPriceMT5toMT4 -value "Oscillators_Price" -file $Destino
-	ConvertPriceMT5toMT4 -value "Oscillator2_Price" -file $Destino
-	ConvertPriceMT5toMT4 -value "Oscillator3_Price" -file $Destino
-	ConvertPriceMT5toMT4 -value "IdentifyTrend_AppliedPrice" -file $Destino
-	ConvertPriceMT5toMT4 -value "TDI_AppliedPriceRSI" -file $Destino
-	ConvertPriceMT5toMT4 -value "MACD_Price" -file $Destino
-	ConvertPriceMT5toMT4 -value "MACD2_Price" -file $Destino
-	ConvertPriceMT5toMT4 -value "MA_Filter_1_Price" -file $Destino
-	ConvertPriceMT5toMT4 -value "MA_Filter_2_Price" -file $Destino
-	ConvertPriceMT5toMT4 -value "MA_Filter_3_Price" -file $Destino
-	Set-OrAddIniValue -FilePath $Destino  -keyValueList @{
-		ADX_Price = "0"
-	}
-	 
-	#Convert Bool (true/false)
-	ConvertBoolMT5toMT4 -value "ShowVirtualInfoOnChart" -file $Destino
-	ConvertBoolMT5toMT4 -value "ManageManual" -file $Destino
-	ConvertBoolMT5toMT4 -value "RiskPerCurrency_UseSemaphor" -file $Destino
-	ConvertBoolMT5toMT4 -value "GlobalAccountStopTillTomorrow" -file $Destino
-	ConvertBoolMT5toMT4 -value "VolPV_FixOn1stPosOpen" -file $Destino
-	ConvertBoolMT5toMT4 -value "Pending_DisableForOpposite" -file $Destino
-	ConvertBoolMT5toMT4 -value "Pending_DeleteIfOpposite" -file $Destino
-	ConvertBoolMT5toMT4 -value "GlobalTakeProfit_OnlyLock" -file $Destino
-	ConvertBoolMT5toMT4 -value "UseVirtualTP" -file $Destino
-	ConvertBoolMT5toMT4 -value "MartingailOnTheBarEnd" -file $Destino
-	ConvertBoolMT5toMT4 -value "ApplyAfterClosedLoss" -file $Destino
-	ConvertBoolMT5toMT4 -value "AntiMartingail_AllowTP" -file $Destino
-	ConvertBoolMT5toMT4 -value "AllowBothMartinAndAntiMartin" -file $Destino
-	ConvertBoolMT5toMT4 -value "PartialClose_AnyToAny" -file $Destino
-	ConvertBoolMT5toMT4 -value "PartialClose_CloseProfitItself" -file $Destino
-	ConvertBoolMT5toMT4 -value "PartialCloseHedge_MainToMain" -file $Destino
-	ConvertBoolMT5toMT4 -value "PartialCloseHedge_BothWays" -file $Destino
-	ConvertBoolMT5toMT4 -value "Oscillators_ContrTrend" -file $Destino
-	ConvertBoolMT5toMT4 -value "Oscillator2_ContrTrend" -file $Destino
-	ConvertBoolMT5toMT4 -value "Oscillator3_ContrTrend" -file $Destino
-	ConvertBoolMT5toMT4 -value "IdentifyTrend_Reverse" -file $Destino
-	ConvertBoolMT5toMT4 -value "IdentifyTrend_UseClosedBars" -file $Destino
-	ConvertBoolMT5toMT4 -value "TDI_Reverse" -file $Destino
-	ConvertBoolMT5toMT4 -value "MACD_Reverse" -file $Destino
-	ConvertBoolMT5toMT4 -value "MACD2_Reverse" -file $Destino
-	ConvertBoolMT5toMT4 -value "ADX_Reverse" -file $Destino
-	ConvertBoolMT5toMT4 -value "DTrend_Reverse" -file $Destino
-	ConvertBoolMT5toMT4 -value "DTrend_UseClosedBars" -file $Destino
-	ConvertBoolMT5toMT4 -value "PSar_Reverse" -file $Destino
-	ConvertBoolMT5toMT4 -value "ZZ_UsePrevExtremums" -file $Destino
-	ConvertBoolMT5toMT4 -value "ZZ_Reverse" -file $Destino
-	ConvertBoolMT5toMT4 -value "ZZ_UseClosedBars" -file $Destino
-	ConvertBoolMT5toMT4 -value "ZZ_FillRectangle" -file $Destino
-	ConvertBoolMT5toMT4 -value "CustomIndy1_Reverse" -file $Destino
-	ConvertBoolMT5toMT4 -value "CustomIndy2_Reverse" -file $Destino
-	ConvertBoolMT5toMT4 -value "CustomIndy2_DrawInSubwindow" -file $Destino
-	ConvertBoolMT5toMT4 -value "Custom_Schedule_On" -file $Destino
-	ConvertBoolMT5toMT4 -value "News_Impact_L" -file $Destino
-	ConvertBoolMT5toMT4 -value "News_Impact_N" -file $Destino
-	ConvertBoolMT5toMT4 -value "Profit_ShowInPercents" -file $Destino
-	ConvertBoolMT5toMT4 -value "Alerts_Enabled" -file $Destino
-	ConvertBoolMT5toMT4 -value "Sounds_Enabled" -file $Destino
-	ConvertBoolMT5toMT4 -value "SaveVirtualStateOnEveryChange" -file $Destino
-	ConvertBoolMT5toMT4 -value "SendAlertsToGrammy" -file $Destino
-	ConvertBoolMT5toMT4 -value "NewDealOnNewBar" -file $Destino
-	ConvertBoolMT5toMT4 -value "AllowHedge" -file $Destino
-	ConvertBoolMT5toMT4 -value "CL_CloseOnProfitAndDD" -file $Destino
-	ConvertBoolMT5toMT4 -value "Pending_CancelOnOpposite" -file $Destino
-	ConvertBoolMT5toMT4 -value "UseVirtualSL" -file $Destino
-	ConvertBoolMT5toMT4 -value "UseOnlyOpenedTrades" -file $Destino
-	ConvertBoolMT5toMT4 -value "BigCandle_CurrentBar" -file $Destino
-	ConvertBoolMT5toMT4 -value "Oscillators_UseClosedBars" -file $Destino
-	ConvertBoolMT5toMT4 -value "Oscillator2_UseClosedBars" -file $Destino
-	ConvertBoolMT5toMT4 -value "Oscillator3_UseClosedBars" -file $Destino
-	ConvertBoolMT5toMT4 -value "IdentifyTrend_Enable" -file $Destino
-	ConvertBoolMT5toMT4 -value "TDI_UseClosedBars" -file $Destino
-	ConvertBoolMT5toMT4 -value "MACD_UseClosedBars" -file $Destino
-	ConvertBoolMT5toMT4 -value "MACD2_UseClosedBars" -file $Destino
-	ConvertBoolMT5toMT4 -value "ADX_UseClosedBars" -file $Destino
-	ConvertBoolMT5toMT4 -value "ZZ_VisualizeLevels" -file $Destino
-	ConvertBoolMT5toMT4 -value "FIBO_UseClosedBars" -file $Destino
-	ConvertBoolMT5toMT4 -value "FIB2_UseClosedBars" -file $Destino
-	ConvertBoolMT5toMT4 -value "CustomIndy1_UseClosedBars" -file $Destino
-	ConvertBoolMT5toMT4 -value "CustomIndy1_DrawInSubwindow" -file $Destino
-	ConvertBoolMT5toMT4 -value "CustomIndy1_AllowNegativeAndZero" -file $Destino
-	ConvertBoolMT5toMT4 -value "CustomIndy2_UseClosedBars" -file $Destino
-	ConvertBoolMT5toMT4 -value "CustomIndy2_AllowNegativeAndZero" -file $Destino
-	ConvertBoolMT5toMT4 -value "Spread_ApplyToFirst" -file $Destino
-	ConvertBoolMT5toMT4 -value "Spread_ApplyToMartin" -file $Destino
-	ConvertBoolMT5toMT4 -value "News_Impact_H" -file $Destino
-	ConvertBoolMT5toMT4 -value "News_Impact_M" -file $Destino
-	ConvertBoolMT5toMT4 -value "News_ShowOnChart" -file $Destino
-	ConvertBoolMT5toMT4 -value "Lines_AllowDragging" -file $Destino
-	ConvertBoolMT5toMT4 -value "GUI_Enabled" -file $Destino
-	ConvertBoolMT5toMT4 -value "GUI_ShowSignals" -file $Destino
-	ConvertBoolMT5toMT4 -value "Show_Closed" -file $Destino
-	ConvertBoolMT5toMT4 -value "Show_Pending" -file $Destino
-	ConvertBoolMT5toMT4 -value "Profit_ShowInMoney" -file $Destino
-	ConvertBoolMT5toMT4 -value "Profit_ShowInPoints" -file $Destino
-	ConvertBoolMT5toMT4 -value "Profit_Aggregate" -file $Destino
-	ConvertBoolMT5toMT4 -value "SL_TP_Dashes_Show" -file $Destino
-	ConvertBoolMT5toMT4 -value "MessagesToGrammy" -file $Destino
+    if (!(ConvertTFMT5toMT4 -value "Signal_TimeFrame" -file $Destino)) {
+        return [bool]$false, 'Signal_TimeFrame'
+    }
+    if (!(ConvertTFMT5toMT4 -value "VolPV_TF" -file $Destino)) {
+        return [bool]$false, 'VolPV_TF'
+    }
+    if (!(ConvertTFMT5toMT4 -value "BigCandle_TF" -file $Destino)) {
+        return [bool]$false, 'BigCandle_TF'
+    }
+    if (!(ConvertTFMT5toMT4 -value "Oscillators_TF" -file $Destino)) {
+        return [bool]$false, 'Oscillators_TF'
+    }
+    if (!(ConvertTFMT5toMT4 -value "Oscillator2_TF" -file $Destino)) {
+        return [bool]$false, 'Oscillator2_TF'
+    }
+    if (!(ConvertTFMT5toMT4 -value "Oscillator3_TF" -file $Destino)) {
+        return [bool]$false, 'Oscillator3_TF'
+    }
+    if (!(ConvertTFMT5toMT4 -value "IdentifyTrend_TF" -file $Destino)) {
+        return [bool]$false, 'IdentifyTrend_TF'
+    }
+    if (!(ConvertTFMT5toMT4 -value "TDI_TF" -file $Destino)) {
+        return [bool]$false, 'TDI_TF'
+    }
+    if (!(ConvertTFMT5toMT4 -value "MACD_TF" -file $Destino)) {
+        return [bool]$false, 'MACD_TF'
+    }
+    if (!(ConvertTFMT5toMT4 -value "MACD2_TF" -file $Destino)) {
+        return [bool]$false, 'MACD2_TF'
+    }
+    if (!(ConvertTFMT5toMT4 -value "ADX_TF" -file $Destino)) {
+        return [bool]$false, 'ADX_TF'
+    }
+    if (!(ConvertTFMT5toMT4 -value "DTrend_TF" -file $Destino)) {
+        return [bool]$false, 'DTrend_TF'
+    }
+    if (!(ConvertTFMT5toMT4 -value "PSar_TF" -file $Destino)) {
+        return [bool]$false, 'PSar_TF'
+    }
+    if (!(ConvertTFMT5toMT4 -value "MA_Filter_1_TF" -file $Destino)) {
+        return [bool]$false, 'MA_Filter_1_TF'
+    }
+    if (!(ConvertTFMT5toMT4 -value "MA_Filter_2_TF" -file $Destino)) {
+        return [bool]$false, 'MA_Filter_2_TF'
+    }
+    if (!(ConvertTFMT5toMT4 -value "MA_Filter_3_TF" -file $Destino)) {
+        return [bool]$false, 'MA_Filter_3_TF'
+    }
+    if (!(ConvertTFMT5toMT4 -value "ZZ_TF" -file $Destino)) {
+        return [bool]$false, 'ZZ_TF'
+    }
+    if (!(ConvertTFMT5toMT4 -value "VolMA_TF" -file $Destino)) {
+        return [bool]$false, 'VolMA_TF'
+    }
+    if (!(ConvertTFMT5toMT4 -value "VolFilter_TF" -file $Destino)) {
+        return [bool]$false, 'VolFilter_TF'
+    }
+    if (!(ConvertTFMT5toMT4 -value "FIBO_TF" -file $Destino)) {
+        return [bool]$false, 'FIBO_TF'
+    }
+    if (!(ConvertTFMT5toMT4 -value "FIB2_TF" -file $Destino)) {
+        return [bool]$false, 'FIB2_TF'
+    }
+    if (!(ConvertTFMT5toMT4 -value "CustomIndy1_TF" -file $Destino)) {
+        return [bool]$false, 'CustomIndy1_TF'
+    }
+    if (!(ConvertTFMT5toMT4 -value "CustomIndy2_TF" -file $Destino)) {
+        return [bool]$false, 'CustomIndy2_TF'
+    }
 
+    #Convert Price
+    ConvertPriceMT5toMT4 -value "Oscillators_Price" -file $Destino
+    ConvertPriceMT5toMT4 -value "Oscillator2_Price" -file $Destino
+    ConvertPriceMT5toMT4 -value "Oscillator3_Price" -file $Destino
+    ConvertPriceMT5toMT4 -value "IdentifyTrend_AppliedPrice" -file $Destino
+    ConvertPriceMT5toMT4 -value "TDI_AppliedPriceRSI" -file $Destino
+    ConvertPriceMT5toMT4 -value "MACD_Price" -file $Destino
+    ConvertPriceMT5toMT4 -value "MACD2_Price" -file $Destino
+    ConvertPriceMT5toMT4 -value "MA_Filter_1_Price" -file $Destino
+    ConvertPriceMT5toMT4 -value "MA_Filter_2_Price" -file $Destino
+    ConvertPriceMT5toMT4 -value "MA_Filter_3_Price" -file $Destino
+    Set-OrAddIniValue -FilePath $Destino  -keyValueList @{
+        ADX_Price = "0"
+    }
+
+    #Convert Bool (true/false)
+    ConvertBoolMT5toMT4 -value "ShowVirtualInfoOnChart" -file $Destino
+    ConvertBoolMT5toMT4 -value "ManageManual" -file $Destino
+    ConvertBoolMT5toMT4 -value "AllowHedge_OnItsOwnSignal" -file $Destino
+    ConvertBoolMT5toMT4 -value "AllowHedge_RightAfterMain" -file $Destino
+    ConvertBoolMT5toMT4 -value "AllowHedge_OnNewBarOnly" -file $Destino
+    ConvertBoolMT5toMT4 -value "RiskPerCurrency_UseSemaphor" -file $Destino
+    ConvertBoolMT5toMT4 -value "GlobalAccountStopTillTomorrow" -file $Destino
+    ConvertBoolMT5toMT4 -value "VolPV_FixOn1stPosOpen" -file $Destino
+    ConvertBoolMT5toMT4 -value "Pending_DisableForOpposite" -file $Destino
+    ConvertBoolMT5toMT4 -value "Pending_DeleteIfOpposite" -file $Destino
+    ConvertBoolMT5toMT4 -value "GlobalTakeProfit_OnlyLock" -file $Destino
+    ConvertBoolMT5toMT4 -value "UseVirtualTP" -file $Destino
+    ConvertBoolMT5toMT4 -value "MartingailOnTheBarEnd" -file $Destino
+    ConvertBoolMT5toMT4 -value "ApplyAfterClosedLoss" -file $Destino
+    ConvertBoolMT5toMT4 -value "AntiMartingail_OnMartinSignal" -file $Destino
+    ConvertBoolMT5toMT4 -value "AntiMartingail_AllowTP" -file $Destino
+    ConvertBoolMT5toMT4 -value "AllowBothMartinAndAntiMartin" -file $Destino
+    ConvertBoolMT5toMT4 -value "PartialClose_AnyToAny" -file $Destino
+    ConvertBoolMT5toMT4 -value "PartialClose_CloseProfitItself" -file $Destino
+    ConvertBoolMT5toMT4 -value "Oscillators_ContrTrend" -file $Destino
+    ConvertBoolMT5toMT4 -value "Oscillator2_ContrTrend" -file $Destino
+    ConvertBoolMT5toMT4 -value "Oscillator3_ContrTrend" -file $Destino
+    ConvertBoolMT5toMT4 -value "IdentifyTrend_Reverse" -file $Destino
+    ConvertBoolMT5toMT4 -value "IdentifyTrend_UseClosedBars" -file $Destino
+    ConvertBoolMT5toMT4 -value "TDI_Reverse" -file $Destino
+    ConvertBoolMT5toMT4 -value "MACD_Reverse" -file $Destino
+    ConvertBoolMT5toMT4 -value "MACD2_Reverse" -file $Destino
+    ConvertBoolMT5toMT4 -value "ADX_Reverse" -file $Destino
+    ConvertBoolMT5toMT4 -value "DTrend_Reverse" -file $Destino
+    ConvertBoolMT5toMT4 -value "DTrend_UseClosedBars" -file $Destino
+    ConvertBoolMT5toMT4 -value "PSar_Reverse" -file $Destino
+    ConvertBoolMT5toMT4 -value "MA_Filter_1_Reverse" -file $Destino
+    ConvertBoolMT5toMT4 -value "MA_Filter_1_UseClosedBars" -file $Destino
+    ConvertBoolMT5toMT4 -value "MA_Filter_2_Reverse" -file $Destino
+    ConvertBoolMT5toMT4 -value "MA_Filter_2_UseClosedBars" -file $Destino
+    ConvertBoolMT5toMT4 -value "MA_Filter_3_Reverse" -file $Destino
+    ConvertBoolMT5toMT4 -value "MA_Filter_3_UseClosedBars" -file $Destino
+    ConvertBoolMT5toMT4 -value "ZZ_UsePrevExtremums" -file $Destino
+    ConvertBoolMT5toMT4 -value "ZZ_Reverse" -file $Destino
+    ConvertBoolMT5toMT4 -value "ZZ_UseClosedBars" -file $Destino
+    ConvertBoolMT5toMT4 -value "ZZ_FillRectangle" -file $Destino
+    ConvertBoolMT5toMT4 -value "CustomIndy1_Reverse" -file $Destino
+    ConvertBoolMT5toMT4 -value "CustomIndy2_Reverse" -file $Destino
+    ConvertBoolMT5toMT4 -value "CustomIndy2_DrawInSubwindow" -file $Destino
+    ConvertBoolMT5toMT4 -value "Custom_Schedule_On" -file $Destino
+    ConvertBoolMT5toMT4 -value "News_Impact_L" -file $Destino
+    ConvertBoolMT5toMT4 -value "News_Impact_N" -file $Destino
+    ConvertBoolMT5toMT4 -value "Profit_ShowInPercents" -file $Destino
+    ConvertBoolMT5toMT4 -value "Alerts_Enabled" -file $Destino
+    ConvertBoolMT5toMT4 -value "Sounds_Enabled" -file $Destino
+    ConvertBoolMT5toMT4 -value "SaveVirtualStateOnEveryChange" -file $Destino
+    ConvertBoolMT5toMT4 -value "SendAlertsToGrammy" -file $Destino
+    ConvertBoolMT5toMT4 -value "NewDealOnNewBar" -file $Destino
+    ConvertBoolMT5toMT4 -value "AllowHedge" -file $Destino
+    ConvertBoolMT5toMT4 -value "CL_CloseOnProfitAndDD" -file $Destino
+    ConvertBoolMT5toMT4 -value "Pending_CancelOnOpposite" -file $Destino
+    ConvertBoolMT5toMT4 -value "UseVirtualSL" -file $Destino
+    ConvertBoolMT5toMT4 -value "UseOnlyOpenedTrades" -file $Destino
+    ConvertBoolMT5toMT4 -value "BigCandle_CurrentBar" -file $Destino
+    ConvertBoolMT5toMT4 -value "Oscillators_UseClosedBars" -file $Destino
+    ConvertBoolMT5toMT4 -value "Oscillator2_UseClosedBars" -file $Destino
+    ConvertBoolMT5toMT4 -value "Oscillator3_UseClosedBars" -file $Destino
+    ConvertBoolMT5toMT4 -value "IdentifyTrend_Enable" -file $Destino
+    ConvertBoolMT5toMT4 -value "TDI_UseClosedBars" -file $Destino
+    ConvertBoolMT5toMT4 -value "MACD_UseClosedBars" -file $Destino
+    ConvertBoolMT5toMT4 -value "MACD2_UseClosedBars" -file $Destino
+    ConvertBoolMT5toMT4 -value "ADX_UseClosedBars" -file $Destino
+    ConvertBoolMT5toMT4 -value "ZZ_VisualizeLevels" -file $Destino
+    ConvertBoolMT5toMT4 -value "FIBO_UseClosedBars" -file $Destino
+    ConvertBoolMT5toMT4 -value "FIB2_UseClosedBars" -file $Destino
+    ConvertBoolMT5toMT4 -value "CustomIndy1_UseClosedBars" -file $Destino
+    ConvertBoolMT5toMT4 -value "CustomIndy1_DrawInSubwindow" -file $Destino
+    ConvertBoolMT5toMT4 -value "CustomIndy1_AllowNegativeAndZero" -file $Destino
+    ConvertBoolMT5toMT4 -value "CustomIndy2_UseClosedBars" -file $Destino
+    ConvertBoolMT5toMT4 -value "CustomIndy2_AllowNegativeAndZero" -file $Destino
+    ConvertBoolMT5toMT4 -value "Spread_ApplyToFirst" -file $Destino
+    ConvertBoolMT5toMT4 -value "Spread_ApplyToMartin" -file $Destino
+    ConvertBoolMT5toMT4 -value "News_Impact_H" -file $Destino
+    ConvertBoolMT5toMT4 -value "News_Impact_M" -file $Destino
+    ConvertBoolMT5toMT4 -value "News_ShowOnChart" -file $Destino
+    ConvertBoolMT5toMT4 -value "Lines_AllowDragging" -file $Destino
+    ConvertBoolMT5toMT4 -value "GUI_Enabled" -file $Destino
+    ConvertBoolMT5toMT4 -value "GUI_ShowSignals" -file $Destino
+    ConvertBoolMT5toMT4 -value "Show_Closed" -file $Destino
+    ConvertBoolMT5toMT4 -value "Show_Pending" -file $Destino
+    ConvertBoolMT5toMT4 -value "Profit_ShowInMoney" -file $Destino
+    ConvertBoolMT5toMT4 -value "Profit_ShowInPoints" -file $Destino
+    ConvertBoolMT5toMT4 -value "Profit_Aggregate" -file $Destino
+    ConvertBoolMT5toMT4 -value "SL_TP_Dashes_Show" -file $Destino
+    ConvertBoolMT5toMT4 -value "MessagesToGrammy" -file $Destino
 
     return [bool]$true
 }
@@ -430,8 +432,8 @@ $button_Click = {
                 $statusBar.Text = "Successfully"
             }
             else {
-                [System.Windows.Forms.MessageBox]::Show('ERROR. ' + $TF , 'Convert from MT5 to MT4', 0, 16)
-                $statusBar.Text = "ERROR." + $TF
+                [System.Windows.Forms.MessageBox]::Show('ERROR . Check ' + $TF , 'Convert from MT5 to MT4', 0, 16)
+                $statusBar.Text = "ERROR. Verify " + $TF
             }
         }
     }
