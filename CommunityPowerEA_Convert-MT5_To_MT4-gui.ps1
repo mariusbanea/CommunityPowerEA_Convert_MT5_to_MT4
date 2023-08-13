@@ -2,8 +2,8 @@
 # Drag and Drop file in Windows Forms and press button
 #
 # Autor: Ulises Cune (@Ulises2k)
-# v1.9
-#
+# v1.10
+# CP v2.54
 #
 #######################CONSOLE################################################################
 Function Get-IniFile {
@@ -250,11 +250,17 @@ function MainConvert2MT4 {
     if (!(ConvertTFMT5toMT4 -value "FIB2_TF" -file $Destino)) {
         return [bool]$false, 'FIB2_TF'
     }
+    if (!(ConvertTFMT5toMT4 -value "MACDF_TF" -file $Destino)) {
+        return [bool]$false, 'MACDF_TF'
+    }
     if (!(ConvertTFMT5toMT4 -value "CustomIndy1_TF" -file $Destino)) {
         return [bool]$false, 'CustomIndy1_TF'
     }
     if (!(ConvertTFMT5toMT4 -value "CustomIndy2_TF" -file $Destino)) {
         return [bool]$false, 'CustomIndy2_TF'
+    }
+    if (!(ConvertTFMT5toMT4 -value "CustomIndy3_TF" -file $Destino)) {
+        return [bool]$false, 'CustomIndy3_TF'
     }
 
     #Convert Price
@@ -268,6 +274,7 @@ function MainConvert2MT4 {
     ConvertPriceMT5toMT4 -value "MA_Filter_1_Price" -file $Destino
     ConvertPriceMT5toMT4 -value "MA_Filter_2_Price" -file $Destino
     ConvertPriceMT5toMT4 -value "MA_Filter_3_Price" -file $Destino
+    ConvertPriceMT5toMT4 -value "MACDF_Price" -file $Destino
     Set-OrAddIniValue -FilePath $Destino  -keyValueList @{
         ADX_Price = "0"
     }
@@ -275,6 +282,7 @@ function MainConvert2MT4 {
     #Convert Bool (true/false)
     ConvertBoolMT5toMT4 -value "ShowVirtualInfoOnChart" -file $Destino
     ConvertBoolMT5toMT4 -value "ManageManual" -file $Destino
+    ConvertBoolMT5toMT4 -value "ApplyAfterClosedLoss" -file $Destino
     ConvertBoolMT5toMT4 -value "AllowHedge_OnItsOwnSignal" -file $Destino
     ConvertBoolMT5toMT4 -value "AllowHedge_RightAfterMain" -file $Destino
     ConvertBoolMT5toMT4 -value "AllowHedge_OnNewBarOnly" -file $Destino
@@ -284,9 +292,7 @@ function MainConvert2MT4 {
     ConvertBoolMT5toMT4 -value "Pending_DisableForOpposite" -file $Destino
     ConvertBoolMT5toMT4 -value "Pending_DeleteIfOpposite" -file $Destino
     ConvertBoolMT5toMT4 -value "GlobalTakeProfit_OnlyLock" -file $Destino
-    ConvertBoolMT5toMT4 -value "UseVirtualTP" -file $Destino
     ConvertBoolMT5toMT4 -value "MartingailOnTheBarEnd" -file $Destino
-    ConvertBoolMT5toMT4 -value "ApplyAfterClosedLoss" -file $Destino
     ConvertBoolMT5toMT4 -value "AntiMartingail_OnMartinSignal" -file $Destino
     ConvertBoolMT5toMT4 -value "AntiMartingail_AllowTP" -file $Destino
     ConvertBoolMT5toMT4 -value "AllowBothMartinAndAntiMartin" -file $Destino
@@ -317,6 +323,8 @@ function MainConvert2MT4 {
     ConvertBoolMT5toMT4 -value "CustomIndy1_Reverse" -file $Destino
     ConvertBoolMT5toMT4 -value "CustomIndy2_Reverse" -file $Destino
     ConvertBoolMT5toMT4 -value "CustomIndy2_DrawInSubwindow" -file $Destino
+    ConvertBoolMT5toMT4 -value "CustomIndy3_Reverse" -file $Destino
+    ConvertBoolMT5toMT4 -value "CustomIndy3_DrawInSubwindow" -file $Destino
     ConvertBoolMT5toMT4 -value "Custom_Schedule_On" -file $Destino
     ConvertBoolMT5toMT4 -value "News_Impact_L" -file $Destino
     ConvertBoolMT5toMT4 -value "News_Impact_N" -file $Destino
@@ -330,6 +338,7 @@ function MainConvert2MT4 {
     ConvertBoolMT5toMT4 -value "CL_CloseOnProfitAndDD" -file $Destino
     ConvertBoolMT5toMT4 -value "Pending_CancelOnOpposite" -file $Destino
     ConvertBoolMT5toMT4 -value "UseVirtualSL" -file $Destino
+    ConvertBoolMT5toMT4 -value "UseVirtualTP" -file $Destino
     ConvertBoolMT5toMT4 -value "UseOnlyOpenedTrades" -file $Destino
     ConvertBoolMT5toMT4 -value "BigCandle_CurrentBar" -file $Destino
     ConvertBoolMT5toMT4 -value "Oscillators_UseClosedBars" -file $Destino
@@ -348,6 +357,8 @@ function MainConvert2MT4 {
     ConvertBoolMT5toMT4 -value "CustomIndy1_AllowNegativeAndZero" -file $Destino
     ConvertBoolMT5toMT4 -value "CustomIndy2_UseClosedBars" -file $Destino
     ConvertBoolMT5toMT4 -value "CustomIndy2_AllowNegativeAndZero" -file $Destino
+    ConvertBoolMT5toMT4 -value "CustomIndy3_UseClosedBars" -file $Destino
+    ConvertBoolMT5toMT4 -value "CustomIndy3_AllowNegativeAndZero" -file $Destino
     ConvertBoolMT5toMT4 -value "Spread_ApplyToFirst" -file $Destino
     ConvertBoolMT5toMT4 -value "Spread_ApplyToMartin" -file $Destino
     ConvertBoolMT5toMT4 -value "News_Impact_H" -file $Destino

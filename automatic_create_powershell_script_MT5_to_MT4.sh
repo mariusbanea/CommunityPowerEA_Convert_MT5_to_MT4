@@ -1,6 +1,12 @@
 #!/bin/bash
 
-CP="default_v2.53.1-MT5.set"
+
+CP=$1
+if [ -z "$1" ] ; then
+	echo "Falta pasar por parametro el setting file"
+	exit 1
+fi
+
 CP_OUT=$CP-ansi.txt
 
 cat $CP | tr -d '\0' > $CP_OUT
