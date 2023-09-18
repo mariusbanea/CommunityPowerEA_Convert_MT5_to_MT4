@@ -2,8 +2,8 @@
 # Drag and Drop file in Windows Forms and press button
 #
 # Autor: Ulises Cune (@Ulises2k)
-# v1.10
-# CP v2.54
+# v1.11
+# CP v2.55
 #
 #######################CONSOLE################################################################
 Function Get-IniFile {
@@ -149,8 +149,10 @@ function ConvertPriceMT5toMT4 {
     $inifile = Get-IniFile($file)
     $rvalue = [int]$inifile[$value]
     $rvalue = $rvalue - 1
-    Set-OrAddIniValue -FilePath $file -keyValueList @{
-        $value = [string]$rvalue
+    if (Select-String -Path $file -Quiet -Pattern $value) {
+        Set-OrAddIniValue -FilePath $file -keyValueList @{
+            $value = [string]$rvalue
+        }
     }
 }
 
@@ -284,8 +286,10 @@ function MainConvert2MT4 {
     ConvertPriceMT5toMT4 -value "MA_Filter_2_Price" -file $Destino
     ConvertPriceMT5toMT4 -value "MA_Filter_3_Price" -file $Destino
     ConvertPriceMT5toMT4 -value "MACDF_Price" -file $Destino
-    Set-OrAddIniValue -FilePath $Destino  -keyValueList @{
-        ADX_Price = "0"
+    if (Select-String -Path $Destino -Quiet -Pattern "ADX_Price") {
+        Set-OrAddIniValue -FilePath $Destino  -keyValueList @{
+            ADX_Price = "0"
+        }
     }
 
     #Convert Bool (true/false)
