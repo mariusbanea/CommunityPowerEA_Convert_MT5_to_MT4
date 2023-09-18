@@ -235,6 +235,15 @@ function MainConvert2MT4 {
     if (!(ConvertTFMT5toMT4 -value "MA_Filter_3_TF" -file $Destino)) {
         return [bool]$false, 'MA_Filter_3_TF'
     }
+    if (!(ConvertTFMT5toMT4 -value "LineFilter_1_TF" -file $Destino)) {
+        return [bool]$false, 'LineFilter_1_TF'
+    }
+    if (!(ConvertTFMT5toMT4 -value "LineFilter_2_TF" -file $Destino)) {
+        return [bool]$false, 'LineFilter_2_TF'
+    }
+    if (!(ConvertTFMT5toMT4 -value "LineFilter_3_TF" -file $Destino)) {
+        return [bool]$false, 'LineFilter_3_TF'
+    }
     if (!(ConvertTFMT5toMT4 -value "ZZ_TF" -file $Destino)) {
         return [bool]$false, 'ZZ_TF'
     }
@@ -286,18 +295,23 @@ function MainConvert2MT4 {
     ConvertBoolMT5toMT4 -value "AllowHedge_OnItsOwnSignal" -file $Destino
     ConvertBoolMT5toMT4 -value "AllowHedge_RightAfterMain" -file $Destino
     ConvertBoolMT5toMT4 -value "AllowHedge_OnNewBarOnly" -file $Destino
+    ConvertBoolMT5toMT4 -value "RiskPerCurrency_OnePosPerEA" -file $Destino
     ConvertBoolMT5toMT4 -value "RiskPerCurrency_UseSemaphor" -file $Destino
     ConvertBoolMT5toMT4 -value "GlobalAccountStopTillTomorrow" -file $Destino
     ConvertBoolMT5toMT4 -value "VolPV_FixOn1stPosOpen" -file $Destino
     ConvertBoolMT5toMT4 -value "Pending_DisableForOpposite" -file $Destino
     ConvertBoolMT5toMT4 -value "Pending_DeleteIfOpposite" -file $Destino
+    ConvertBoolMT5toMT4 -value "TakeProfit_CancelIfOpposite" -file $Destino
     ConvertBoolMT5toMT4 -value "GlobalTakeProfit_OnlyLock" -file $Destino
+    ConvertBoolMT5toMT4 -value "UseVirtualTP" -file $Destino
+    ConvertBoolMT5toMT4 -value "TrailingStop_CancelIfOpposite" -file $Destino
     ConvertBoolMT5toMT4 -value "MartingailOnTheBarEnd" -file $Destino
     ConvertBoolMT5toMT4 -value "AntiMartingail_OnMartinSignal" -file $Destino
     ConvertBoolMT5toMT4 -value "AntiMartingail_AllowTP" -file $Destino
     ConvertBoolMT5toMT4 -value "AllowBothMartinAndAntiMartin" -file $Destino
     ConvertBoolMT5toMT4 -value "PartialClose_AnyToAny" -file $Destino
     ConvertBoolMT5toMT4 -value "PartialClose_CloseProfitItself" -file $Destino
+    ConvertBoolMT5toMT4 -value "PartialClose_SortByProfit" -file $Destino
     ConvertBoolMT5toMT4 -value "Oscillators_ContrTrend" -file $Destino
     ConvertBoolMT5toMT4 -value "Oscillator2_ContrTrend" -file $Destino
     ConvertBoolMT5toMT4 -value "Oscillator3_ContrTrend" -file $Destino
@@ -316,6 +330,12 @@ function MainConvert2MT4 {
     ConvertBoolMT5toMT4 -value "MA_Filter_2_UseClosedBars" -file $Destino
     ConvertBoolMT5toMT4 -value "MA_Filter_3_Reverse" -file $Destino
     ConvertBoolMT5toMT4 -value "MA_Filter_3_UseClosedBars" -file $Destino
+    ConvertBoolMT5toMT4 -value "LineFilter_1_Reverse" -file $Destino
+    ConvertBoolMT5toMT4 -value "LineFilter_1_UseClosedBars" -file $Destino
+    ConvertBoolMT5toMT4 -value "LineFilter_2_Reverse" -file $Destino
+    ConvertBoolMT5toMT4 -value "LineFilter_2_UseClosedBars" -file $Destino
+    ConvertBoolMT5toMT4 -value "LineFilter_3_Reverse" -file $Destino
+    ConvertBoolMT5toMT4 -value "LineFilter_3_UseClosedBars" -file $Destino
     ConvertBoolMT5toMT4 -value "ZZ_UsePrevExtremums" -file $Destino
     ConvertBoolMT5toMT4 -value "ZZ_Reverse" -file $Destino
     ConvertBoolMT5toMT4 -value "ZZ_UseClosedBars" -file $Destino
@@ -338,7 +358,6 @@ function MainConvert2MT4 {
     ConvertBoolMT5toMT4 -value "CL_CloseOnProfitAndDD" -file $Destino
     ConvertBoolMT5toMT4 -value "Pending_CancelOnOpposite" -file $Destino
     ConvertBoolMT5toMT4 -value "UseVirtualSL" -file $Destino
-    ConvertBoolMT5toMT4 -value "UseVirtualTP" -file $Destino
     ConvertBoolMT5toMT4 -value "UseOnlyOpenedTrades" -file $Destino
     ConvertBoolMT5toMT4 -value "BigCandle_CurrentBar" -file $Destino
     ConvertBoolMT5toMT4 -value "Oscillators_UseClosedBars" -file $Destino
