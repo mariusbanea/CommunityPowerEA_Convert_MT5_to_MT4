@@ -286,7 +286,7 @@ function MainConvert2MT4 {
     ConvertPriceMT5toMT4 -value "MA_Filter_2_Price" -file $Destino
     ConvertPriceMT5toMT4 -value "MA_Filter_3_Price" -file $Destino
     ConvertPriceMT5toMT4 -value "MACDF_Price" -file $Destino
-    if (Select-String -Path $Destino -Quiet -Pattern "ADX_Price") {
+    if (Select-String -Path $Destino -Quiet -Pattern "ADX_Type") {
         Set-OrAddIniValue -FilePath $Destino  -keyValueList @{
             ADX_Price = "0"
         }
@@ -422,11 +422,17 @@ $button.Location = '5,5'
 $button.Size = '120,23'
 $button.Text = "Convert to MT4"
 
-# Button
-$button2 = New-Object System.Windows.Forms.Button
-$button2.Location = '5,30'
-$button2.Size = '75,23'
-$button2.Text = "Clear"
+# Button Open File
+$buttonOpenFile = New-Object System.Windows.Forms.Button
+$buttonOpenFile.Location = '5,80'
+$buttonOpenFile.Size = '40,20'
+$buttonOpenFile.Text = "Open"
+
+# Button Clear
+$buttonClear = New-Object System.Windows.Forms.Button
+$buttonClear.Location = '5,100'
+$buttonClear.Size = '40,20'
+$buttonClear.Text = "Clear"
 
 # Label
 $label = New-Object System.Windows.Forms.Label
@@ -436,8 +442,8 @@ $label.Text = "Drag and Drop MT5 files settings here:"
 
 # Listbox
 $listBox = New-Object System.Windows.Forms.ListBox
-$listBox.Location = '5,80'
-$listBox.Size = '760,180'
+$listBox.Location = '60,80'
+$listBox.Size = '720,180'
 $listBox.Anchor = ([System.Windows.Forms.AnchorStyles]::Bottom -bor [System.Windows.Forms.AnchorStyles]::Left -bor [System.Windows.Forms.AnchorStyles]::Right -bor [System.Windows.Forms.AnchorStyles]::Top)
 $listBox.IntegralHeight = $False
 $listBox.AllowDrop = $True
@@ -448,14 +454,31 @@ $statusBar.Text = "Ready"
 
 ### Add controls to form ###
 $form.SuspendLayout()
+$form.Controls.Add($buttonOpenFile) #OpenFile
+$form.Controls.Add($buttonClear)    #Clear
 $form.Controls.Add($button)
-$form.Controls.Add($button2)
 $form.Controls.Add($label)
 $form.Controls.Add($listBox)
 $form.Controls.Add($statusBar)
 $form.ResumeLayout()
 
 ### Write event handlers ###
+# OpenFile *.set
+$buttonOpenFile_Click = {
+    $dialog = New-Object Windows.Forms.OpenFileDialog
+    $dialog.Filter = "File SET (*.set)|*.set|File INI (*.ini)|*.ini"
+    $result = $dialog.ShowDialog()
+    if ($result -eq [Windows.Forms.DialogResult]::OK) {
+        $listBox.Items.Add($dialog.FileName)
+    }
+}
+
+# Clear
+$buttonClear_Click = {
+    $listBox.Items.Clear()
+    $statusBar.Text = ""
+}
+
 $button_Click = {
     foreach ($item in $listBox.Items) {
         $i = Get-Item -LiteralPath $item
@@ -471,11 +494,6 @@ $button_Click = {
             }
         }
     }
-}
-
-$button2_Click = {
-    $listBox.Items.Clear()
-    $statusBar.Text = ""
 }
 
 $listBox_DragOver = [System.Windows.Forms.DragEventHandler] {
@@ -495,8 +513,9 @@ $listBox_DragDrop = [System.Windows.Forms.DragEventHandler] {
 }
 
 ### Wire up events ###
+$buttonOpenFile.Add_Click($buttonOpenFile_Click)   #OpenFile
+$buttonClear.Add_Click($buttonClear_Click)  #Clear
 $button.Add_Click($button_Click)
-$button2.Add_Click($button2_Click)
 $listBox.Add_DragOver($listBox_DragOver)
 $listBox.Add_DragDrop($listBox_DragDrop)
 
